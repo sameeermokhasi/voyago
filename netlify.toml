@@ -4,15 +4,11 @@
   command = "npm run build"
 
 # --- API REWRITE RULE (Active after Backend Deployment) ---
-# Once you deploy the backend on Render, uncomment the block below
-# and replace 'https://your-render-url.com' with your actual backend URL.
-# This makes requests to /api/... go to your Render backend.
-
-# [[redirects]]
-#   from = "/api/*"
-#   to = "https://your-backend-app-name.onrender.com/api/:splat"
-#   status = 200
-#   force = true
+[[redirects]]
+  from = "/api/*"
+  to = "https://voyago-7192.onrender.com/api/:splat"
+  status = 200
+  force = true
 
 # Fallback for SPA Routing (React Router)
 [[redirects]]
