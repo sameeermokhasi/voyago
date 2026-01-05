@@ -32,15 +32,6 @@ app = FastAPI(
     lifespan=lifespan
 )
 
-@app.middleware("http")
-async def log_requests(request: Request, call_next):
-    print(f"--- REQUEST: {request.method} {request.url.path} ---")
-    response = await call_next(request)
-    print(f"--- RESPONSE: {response.status_code} ---")
-    return response
-
-# Trigger reload 4
-
 # CORS middleware - Updated to allow all frontend ports
 app.add_middleware(
     CORSMiddleware,
@@ -56,11 +47,18 @@ app.add_middleware(
         "http://127.0.0.1:6001",
         "http://127.0.0.1:7001",
     ],
-    allow_origin_regex="https://.*\.netlify\.app|https://.*\.onrender\.com",
+    allow_origin_regex=r"https://.*\.netlify\.app|https://.*\.onrender\.com",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+@app.middleware("http")
+async def log_requests(request: Request, call_next):
+    print(f"--- REQUEST: {request.method} {request.url.path} ---")
+    response = await call_next(request)
+    print(f"--- RESPONSE: {response.status_code} ---")
+    return response
 
 # Include routers
 app.include_router(auth.router, prefix="/api/auth", tags=["Authentication"])
