@@ -10,13 +10,20 @@ from app.websocket import manager
 from app.auth import decode_access_token, get_current_active_user
 from sqlalchemy.orm import Session
 
+print("--- LOADING MAIN.PY v2 (PING INCLUDED) ---")
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    print("--- LIFESPAN STARTUP ---")
     # Startup
-    Base.metadata.create_all(bind=engine)
+    try:
+        Base.metadata.create_all(bind=engine)
+        print("--- DATABASE TABLES CREATED ---")
+    except Exception as e:
+        print(f"--- DB ERROR: {e} ---")
     yield
     # Shutdown
-    pass
+    print("--- SHUTDOWN ---")
 
 app = FastAPI(
     title="Uber Clone API",
