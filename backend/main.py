@@ -49,6 +49,13 @@ async def log_requests(request: Request, call_next):
     print(f"--- RESPONSE: {response.status_code} ---")
     return response
 
+@app.api_route("/{path_name:path}", methods=["GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD", "PATCH"])
+async def catch_all(request: Request, path_name: str):
+    print(f"--- CATCH ALL (TOP PRIORITY) HIT: {request.method} {path_name} ---")
+    # Be careful: This will break ALL other routes if we don't pass through or filter.
+    # For now, let's just log and return 404 to prove we caught it.
+    return {"status": "404", "message": "Caught by Top-Level Debug Route", "path": path_name}
+
 # Include routers
 app.include_router(auth.router, prefix="/api/auth", tags=["Authentication"])
 app.include_router(rides.router, prefix="/api/rides", tags=["Rides"])
