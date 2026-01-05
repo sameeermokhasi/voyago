@@ -47,16 +47,16 @@ app.add_middleware(
     allow_origins=[
         "http://localhost:5173", 
         "http://localhost:3000",
-        "http://localhost:5000",  # Rider frontend
-        "http://localhost:6001",  # Driver frontend
-        "http://localhost:7001",  # Admin frontend
+        "http://localhost:5000",
+        "http://localhost:6001",
+        "http://localhost:7001",
         "http://127.0.0.1:5173",
         "http://127.0.0.1:3000",
         "http://127.0.0.1:5000",
         "http://127.0.0.1:6001",
         "http://127.0.0.1:7001",
-        "https://voyage-go.netlify.app", # Netlify Production
     ],
+    allow_origin_regex="https://.*\.netlify\.app|https://.*\.onrender\.com",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
