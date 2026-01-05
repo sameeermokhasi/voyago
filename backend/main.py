@@ -57,6 +57,10 @@ app.include_router(vacation.router, prefix="/api/vacation", tags=["Vacation"])
 app.include_router(vacation_scheduler.router, prefix="/api/scheduler", tags=["Vacation Scheduler"])
 app.include_router(messages.router, prefix="/api/messages", tags=["Messages"])
 
+@app.get("/ping")
+async def ping():
+    return "pong"
+
 @app.get("/")
 async def root():
     return {
