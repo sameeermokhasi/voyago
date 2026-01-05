@@ -35,20 +35,9 @@ app = FastAPI(
 # CORS middleware - Updated to allow all frontend ports
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:5173", 
-        "http://localhost:3000",
-        "http://localhost:5000",
-        "http://localhost:6001",
-        "http://localhost:7001",
-        "http://127.0.0.1:5173",
-        "http://127.0.0.1:3000",
-        "http://127.0.0.1:5000",
-        "http://127.0.0.1:6001",
-        "http://127.0.0.1:7001",
-    ],
-    allow_origin_regex=r"https://.*\.netlify\.app|https://.*\.onrender\.com",
-    allow_credentials=True,
+    # allow_origins=[...], # Commented out for debug
+    allow_origins=["*"], # Allow ALL origins
+    allow_credentials=False, # Must be False when using "*"
     allow_methods=["*"],
     allow_headers=["*"],
 )
