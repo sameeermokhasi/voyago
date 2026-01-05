@@ -237,17 +237,23 @@ async def verify_otp(verify_data: OTPVerify, db: Session = Depends(get_db)):
 @router.post("/google", response_model=Token)
 def google_login(login_data: GoogleLogin, db: Session = Depends(get_db)):
     """Login or Register with Google"""
+    print(f"--- GOOGLE LOGIN REQUEST RECEIVED ---")
+    print(f"Token Length: {len(login_data.token)}")
     try:
         # Verify ID token via TokenInfo endpoint
         # The frontend sends an ID Token (JWT), not an Access Token
+        print("--- VERIFYING WITH GOOGLE TOKENINFO ---")
         user_info_response = req.get(f"https://oauth2.googleapis.com/tokeninfo?id_token={login_data.token}", timeout=10)
         
+        print(f"--- GOOGLE RESPONSE STATUS: {user_info_response.status_code} ---")
         if user_info_response.status_code != 200:
+             print(f"--- GOOGLE ERROR BODY: {user_info_response.text} ---")
              raise HTTPException(status_code=400, detail="Invalid Google Token")
              
         google_data = user_info_response.json()
         email = google_data.get('email')
         name = google_data.get('name')
+        print(f"--- GOOGLE EMAIL: {email} ---")
         
         if not email:
             raise HTTPException(status_code=400, detail="Email not found in Google Token")
