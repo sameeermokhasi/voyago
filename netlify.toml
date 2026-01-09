@@ -6,7 +6,7 @@
 # --- API REWRITE RULE (Active after Backend Deployment) ---
 [[redirects]]
   from = "/api/*"
-  to = "https://voyago-7192.onrender.com/api/:splat"
+  to = "https://voyago-7l92.onrender.com/api/:splat"
   status = 200
   force = true
 
