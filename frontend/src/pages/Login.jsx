@@ -61,11 +61,23 @@ export default function Login() {
   const handleGoogleLogin = async (response) => {
     try {
       setLoading(true);
-      // By default, assuming Rider role for Google Login if not specified.
-      // Ideally we could ask or detect, but for "Quick Login" mostly Riders use it.
-      const data = await authService.googleLogin(response.credential, 'rider');
+
+      // Determine role based on PORT
+      const currentPort = window.location.port;
+      let role = 'rider'; // default
+      if (currentPort === '6001') role = 'driver';
+      else if (currentPort === '7001') role = 'admin';
+
+      console.log(`Google Login: Detected Port ${currentPort}, Assigning Role: ${role}`);
+
+      const data = await authService.googleLogin(response.credential, role);
+
       login(data.access_token, data.user);
-      navigate('/rider');
+
+      // Navigate based on role match
+      if (data.user.role === 'driver') navigate('/driver');
+      else if (data.user.role === 'admin') navigate('/admin');
+      else navigate('/rider');
     } catch (err) {
       console.error("Google Login Error", err);
       let errorMessage = `Debug Error: ${err.message || err}`;
