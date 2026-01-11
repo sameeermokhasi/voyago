@@ -14,6 +14,7 @@ import { websocketService } from '../services/websocket'
 import { MapContainer, TileLayer, Marker, Popup, Polyline } from 'react-leaflet'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
+import DriverOnboardingModal from '../components/DriverOnboardingModal'
 
 // Fix for default marker icons in Leaflet with Vite
 delete L.Icon.Default.prototype._getIconUrl
@@ -69,6 +70,8 @@ export default function DriverDashboard() {
   const { user, logout } = useAuthStore()
   const navigate = useNavigate()
   const mapRef = useRef(null)
+
+
 
   // Load conversations
   useEffect(() => {
@@ -1726,6 +1729,17 @@ function SafetyMonitor() {
         </div>
       )}
       {/* Chat Window Overlay - REMOVED FROM HERE */}
+
+      {/* Driver Onboarding Modal for New Google Signups */}
+      {user?.driver_profile && (user.driver_profile.license_number?.startsWith('GGL') || !user.driver_profile.vehicle_plate) && (
+        <DriverOnboardingModal
+          user={user}
+          onComplete={() => {
+            // Refresh full page or just user to ensure state is clean
+            window.location.reload();
+          }}
+        />
+      )}
     </div>
   )
 }
