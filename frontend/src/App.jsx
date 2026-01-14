@@ -46,15 +46,20 @@ function ProtectedRoute({ children, allowedRoles }) {
     return <Navigate to="/login" replace />
   }
 
-  // Check if the current port role matches allowed roles
-  if (allowedRoles && !allowedRoles.includes(role)) {
-    console.log('Port role not allowed, redirecting to home')
+  // Determine effective role: User's actual role if logged in, otherwise Port role
+  const effectiveRole = user ? user.role : role
+
+  // Check if the effective role matches allowed roles
+  if (allowedRoles && !allowedRoles.includes(effectiveRole)) {
+    console.log('Role not allowed, redirecting to home')
     return <Navigate to="/" replace />
   }
 
-  // Additional check: if user exists but role doesn't match port, logout
-  if (user && user.role !== role) {
-    console.log('User role mismatch with port, logging out')
+  // Port Logic: Only enforce strict port-role mismatch in DEV environment (Ports 6001/7001)
+  // In Prod (default port), we allow any role.
+  const isDevPort = window.location.port === '6001' || window.location.port === '7001';
+  if (isDevPort && user && user.role !== role) {
+    console.log('Dev Port Mismatch: User role does not match port, logging out')
     const { logout } = useAuthStore.getState()
     logout()
     return <Navigate to="/login" replace />
