@@ -17,10 +17,7 @@ export const authService = {
     return response.data
   },
 
-  async googleLogin(token, role = 'rider') {
-    const response = await api.post('auth/google', { token, role })
-    return response.data
-  },
+
 
   async verifyOTP(email, otp) {
     const response = await api.post('auth/verify-otp', { email, otp })

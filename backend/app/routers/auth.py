@@ -1,7 +1,5 @@
 from datetime import datetime, timedelta, timezone
 import random
-from google.oauth2 import id_token
-from google.auth.transport import requests
 import requests as req
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
@@ -9,7 +7,7 @@ from sqlalchemy.orm import Session
 
 from app.database import get_db
 from app.models import User, UserRole, DriverProfile, LoyaltyPoints
-from app.schemas import UserCreate, UserResponse, Token, DriverProfileCreate, OTPVerify, GoogleLogin, EmailOTP, VerifyEmailOTP
+from app.schemas import UserCreate, UserResponse, Token, DriverProfileCreate, OTPVerify, EmailOTP, VerifyEmailOTP
 from pydantic import BaseModel
 from app.auth import get_password_hash, verify_password, create_access_token
 
@@ -234,115 +232,7 @@ async def verify_otp(verify_data: OTPVerify, db: Session = Depends(get_db)):
         "user": user
     }
 
-@router.post("/google", response_model=Token)
-def google_login(login_data: GoogleLogin, db: Session = Depends(get_db)):
-    """Login or Register with Google"""
-    print(f"--- GOOGLE LOGIN REQUEST RECEIVED ---")
-    print(f"Token Length: {len(login_data.token)}")
-    try:
-        # Verify ID token via TokenInfo endpoint
-        # The frontend sends an ID Token (JWT), not an Access Token
-        print("--- VERIFYING WITH GOOGLE TOKENINFO ---")
-        user_info_response = req.get(f"https://oauth2.googleapis.com/tokeninfo?id_token={login_data.token}", timeout=10)
-        
-        print(f"--- GOOGLE RESPONSE STATUS: {user_info_response.status_code} ---")
-        if user_info_response.status_code != 200:
-             print(f"--- GOOGLE ERROR BODY: {user_info_response.text} ---")
-             raise HTTPException(status_code=400, detail="Invalid Google Token")
-             
-        google_data = user_info_response.json()
-        email = google_data.get('email')
-        name = google_data.get('name')
-        print(f"--- GOOGLE EMAIL: {email} ---")
-        
-        if not email:
-            raise HTTPException(status_code=400, detail="Email not found in Google Token")
 
-        # Check if user exists
-        user = db.query(User).filter(User.email == email).first()
-        
-        if not user:
-            # Register new user automatically
-            # Generate random password
-            random_password = "".join([str(random.randint(0, 9)) for _ in range(12)])
-            hashed_password = get_password_hash(random_password)
-            
-            user = User(
-                name=name,
-                email=email,
-                password=hashed_password,
-                role=login_data.role,
-                is_active=True, # Trusted provider
-                is_verified=True, # Trusted provider
-                profile_picture=google_data.get('picture')
-            )
-            db.add(user)
-            db.commit()
-            db.refresh(user)
-            
-            # Add aux data
-            if user.role == UserRole.RIDER:
-                loyalty = LoyaltyPoints(user_id=user.id)
-                db.add(loyalty)
-            elif user.role == UserRole.DRIVER:
-                # Driver still needs detail updates but we create base profile
-                license_number = f"GGL{user.id:06d}"
-                driver_profile = DriverProfile(
-                    user_id=user.id,
-                    license_number=license_number,
-                    is_available=False
-                )
-                db.add(driver_profile)
-            
-            db.commit()
-            
-        else:
-            # If user exists, ensure they are active (Google verification overrides OTP requirement)
-            if not user.is_active:
-                user.is_active = True
-                user.is_verified = True
-            
-            # --- ROLE SWITCHING LOGIC ---
-            # If user explicitly requested a different role (via the Google Login UI), update it.
-            if login_data.role and user.role != login_data.role:
-                print(f"--- SWITCHING ROLE: {user.role} -> {login_data.role} ---")
-                user.role = login_data.role
-                
-                # If switching TO Driver, ensure profile exists
-                if user.role == UserRole.DRIVER:
-                    existing_profile = db.query(DriverProfile).filter(DriverProfile.user_id == user.id).first()
-                    if not existing_profile:
-                        license_number = f"GGL{user.id:06d}"
-                        driver_profile = DriverProfile(
-                            user_id=user.id,
-                            license_number=license_number,
-                            is_available=False
-                        )
-                        db.add(driver_profile)
-                        
-                # If switching TO Rider, ensure loyalty points exist
-                elif user.role == UserRole.RIDER:
-                    existing_loyalty = db.query(LoyaltyPoints).filter(LoyaltyPoints.user_id == user.id).first()
-                    if not existing_loyalty:
-                        loyalty = LoyaltyPoints(user_id=user.id)
-                        db.add(loyalty)
-
-            db.commit()
-                
-        access_token = create_access_token(data={"sub": user.email})
-        
-        return {
-            "access_token": access_token,
-            "token_type": "bearer",
-            "user": user
-        }
-            
-    except ValueError:
-        raise HTTPException(status_code=400, detail="Invalid Google Token")
-    except Exception as e:
-        print(f"Google Login Error: {e}")
-        # Return exact error for debugging
-        raise HTTPException(status_code=400, detail=f"Google Login Failed: {str(e)}")
 
 # In-memory OTP storage for demo purposes
 # In production, use Redis or Database with expiration

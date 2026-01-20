@@ -15,5 +15,5 @@ alembic==1.14.0
 email-validator==2.2.0
 googlemaps==4.10.0
 stripe==11.1.1
-google-auth
+
 requests

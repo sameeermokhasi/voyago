@@ -21,9 +21,7 @@ class OTPVerify(BaseModel):
     email: EmailStr
     otp: str
 
-class GoogleLogin(BaseModel):
-    token: str
-    role: UserRole = UserRole.RIDER
+
 
 class EmailOTP(BaseModel):
     email: EmailStr
