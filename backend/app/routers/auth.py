@@ -79,17 +79,26 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = 
     """Login endpoint"""
     user = db.query(User).filter(User.email == form_data.username).first()
     
-    if not user or not verify_password(form_data.password, user.password):
+    if not user:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Incorrect email or password",
+            detail="Debug: User not found",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+        
+    if not verify_password(form_data.password, user.password):
+        # Temp debug: return hash comparison info
+        # WARNING: This leaks hash info, remove after debug
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail=f"Debug: Password mismatch. Stored: {user.password[:10]}...",
             headers={"WWW-Authenticate": "Bearer"},
         )
     
     if not user.is_active:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Inactive user account"
+            detail="Debug: Inactive user account"
         )
     
     access_token = create_access_token(data={"sub": user.email})
