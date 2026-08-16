@@ -1,29 +1,10 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Plane, Hotel, Car, Calendar, Users, MapPin, DollarSign, Award, LogOut, Check, Clock, CheckCircle, Edit2 } from 'lucide-react'
+import { Plane, Hotel, Car, Calendar, Users, MapPin, DollarSign, Award, LogOut, Check, Clock, CheckCircle, Edit2, Compass } from 'lucide-react'
 import { vacationService } from '../services/api'
 import { useAuthStore } from '../store/authStore'
 import EditVacationChecklistModal from '../components/EditVacationChecklistModal'
-
-// Typewriter Component
-const Typewriter = ({ text, speed = 50 }) => {
-  const [displayedText, setDisplayedText] = useState('');
-
-  useEffect(() => {
-    let index = 0;
-    setDisplayedText(''); // Reset on new text
-
-    const intervalId = setInterval(() => {
-      setDisplayedText((prev) => prev + text.charAt(index));
-      index++;
-      if (index === text.length) clearInterval(intervalId);
-    }, speed);
-
-    return () => clearInterval(intervalId);
-  }, [text, speed]);
-
-  return <p>{displayedText}<span className="animate-pulse">|</span></p>;
-};
+import TravelBuddyAgent from '../components/TravelBuddyAgent'
 
 export default function VacationBooking() {
   const [vacations, setVacations] = useState([])
@@ -31,10 +12,6 @@ export default function VacationBooking() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [editingVacation, setEditingVacation] = useState(null)
-
-  // AI State
-  const [showTypewriter, setShowTypewriter] = useState(false);
-  const [aiSuggestion, setAiSuggestion] = useState(null);
 
   const { user, logout } = useAuthStore()
   const navigate = useNavigate()
@@ -142,250 +119,49 @@ export default function VacationBooking() {
       </header>
 
       <div className="container mx-auto px-6 py-8">
-        {/* AI Vacation Planner Section */}
-        <div className="bg-gradient-to-r from-indigo-900 via-purple-900 to-pink-900 rounded-2xl p-8 text-white mb-8 border border-purple-500/30 relative overflow-hidden">
-          {/* Background decoration */}
-          <div className="absolute top-0 right-0 -mr-20 -mt-20 w-80 h-80 bg-purple-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
+        {/* The Travel Buddy Agent (Autonomous LangChain Concierge) */}
+        <TravelBuddyAgent
+          onSelectPlan={(plan) => navigate('/rider/vacation-planner', { state: { aiSuggestion: plan } })}
+        />
 
-          <div className="flex flex-col md:flex-row justify-between items-start relative z-10">
-            <div className="flex-1 max-w-2xl">
-              <div className="flex items-center space-x-2 mb-4">
-                <span className="bg-purple-500/20 text-purple-200 text-xs font-bold px-3 py-1 rounded-full border border-purple-500/50 flex items-center">
-                  <span className="w-2 h-2 bg-purple-400 rounded-full mr-2 animate-pulse"></span>
-                  AI POWERED
+        {/* Quick Navigation & Loyalty Points Status Bar */}
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-6 mb-8 items-center">
+          {/* Quick Action Navigation Buttons */}
+          <div className="md:col-span-8 flex flex-wrap gap-4">
+            <button
+              onClick={() => navigate('/rider/vacation-planner')}
+              className="bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-6 rounded-xl transition-all shadow-lg hover:shadow-purple-600/30 flex items-center border border-purple-500/40"
+            >
+              <Compass className="w-4 h-4 mr-2" />
+              Manual Custom Schedule Planner
+            </button>
+            <button
+              onClick={() => navigate('/rider/fixed-packages')}
+              className="bg-white/5 hover:bg-white/15 text-purple-200 hover:text-white font-semibold py-3 px-6 rounded-xl transition-all border border-purple-400/30 flex items-center"
+            >
+              <Award className="w-4 h-4 mr-2 text-yellow-400" />
+              View Curated Fixed Packages
+            </button>
+          </div>
+
+          {/* Compact Loyalty Status Card */}
+          {loyaltyPoints && (
+            <div className="md:col-span-4 bg-gradient-to-r from-purple-950/50 to-indigo-950/50 backdrop-blur-md rounded-2xl p-4 border border-purple-500/30 shadow-lg">
+              <div className="flex justify-between items-center mb-2">
+                <div className="flex items-center space-x-2">
+                  <Award className="w-5 h-5 text-yellow-400" />
+                  <span className="font-bold text-sm text-white">Voyago Rewards</span>
+                </div>
+                <span className={`px-2.5 py-0.5 rounded-full text-xs font-bold ${getTierColor(loyaltyPoints.tier)}`}>
+                  {loyaltyPoints.tier.toUpperCase()}
                 </span>
               </div>
-              <h1 className="text-4xl font-bold mb-4">Dream it. We plan it.</h1>
-              <p className="text-lg text-purple-100 mb-8">
-                Tell our AI your dream, and we'll generate an instant itinerary.
-              </p>
-
-              <div className="bg-white/10 backdrop-blur-md rounded-xl p-2 border border-white/10">
-                <form
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                    const prompt = e.target.elements.prompt.value.toLowerCase();
-                    let suggestion = null;
-
-                    // Extract Duration (e.g., "6 days", "4 day")
-                    const dayMatch = prompt.match(/(\d+)\s*days?/);
-                    const duration = dayMatch ? parseInt(dayMatch[1]) : 3; // Default to 3 if not specified
-
-                    // Extract Budget (e.g., "under 5000", "max 10k", "below 20000")
-                    const budgetMatch = prompt.match(/(?:under|below|max|budget|rs\.?|INR|₹)\s*(\d+(?:,\d+)*(?:k)?)/i);
-                    let budget = null;
-                    if (budgetMatch) {
-                      let rawBudget = budgetMatch[1].toLowerCase().replace(/,/g, '');
-                      if (rawBudget.includes('k')) {
-                        budget = parseFloat(rawBudget.replace('k', '')) * 1000;
-                      } else {
-                        budget = parseFloat(rawBudget);
-                      }
-                    }
-
-                    // Helper to format currency with strict budget adherence
-                    const estimatePrice = (base, days, userBudget) => {
-                      let calculatedPrice;
-
-                      if (userBudget) {
-                        // If user specified a budget, strictly respect it
-                        // Generate a price between 85% and 98% of the budget
-                        const min = userBudget * 0.85;
-                        const max = userBudget * 0.98;
-                        calculatedPrice = Math.floor(Math.random() * (max - min) + min);
-
-                        // Round to nearest 10 or 100 for cleaner numbers, but keep under budget
-                        if (calculatedPrice > 1000) {
-                          calculatedPrice = Math.floor(calculatedPrice / 100) * 100;
-                        } else {
-                          calculatedPrice = Math.floor(calculatedPrice / 10) * 10;
-                        }
-                      } else {
-                        // Standard calculation if no budget specified
-                        const perDay = base / 3;
-                        calculatedPrice = Math.round(perDay * days / 500) * 500;
-                      }
-
-                      return `₹${calculatedPrice.toLocaleString()}`;
-                    };
-
-                    // Activities Generator
-                    const generateActivities = (type, days) => {
-                      const acts = [];
-                      const baseDate = new Date();
-
-                      for (let i = 0; i < days; i++) {
-                        const date = new Date(baseDate);
-                        date.setDate(baseDate.getDate() + i);
-                        const dateStr = date.toISOString().split('T')[0];
-
-                        if (type === 'beach') {
-                          if (i === 0) acts.push({ date: dateStr, time: '16:00', location: 'Baga/Calangute', description: 'Sunset & Beach Walk' });
-                          if (i === 1) acts.push({ date: dateStr, time: '10:00', location: 'Grand Island', description: 'Scuba Diving & Watersports' });
-                          if (i === 2) acts.push({ date: dateStr, time: '20:00', location: 'Titos Lane', description: 'Nightlife & Party' });
-                          if (i > 2) acts.push({ date: dateStr, time: '11:00', location: 'South Goa', description: `Exploring hidden beaches (Day ${i + 1})` });
-                        } else if (type === 'mountain') {
-                          if (i === 0) acts.push({ date: dateStr, time: '17:00', location: 'Mall Road', description: 'Evening Stroll & Shopping' });
-                          if (i === 1) acts.push({ date: dateStr, time: '09:00', location: 'Jakhu Temple', description: 'Morning Trek' });
-                          if (i >= 2) acts.push({ date: dateStr, time: '10:00', location: 'Kufri / Narkanda', description: `Snow Point & Adventure (Day ${i + 1})` });
-                        } else {
-                          if (i === 0) acts.push({ date: dateStr, time: '10:00', location: 'City Museum', description: 'History & Culture Tour' });
-                          if (i >= 1) acts.push({ date: dateStr, time: '14:00', location: 'Downtown', description: `Shopping & Cafe Hopping (Day ${i + 1})` });
-                        }
-                      }
-                      return acts;
-                    };
-
-                    const isBudgetTrip = budget && budget < 10000;
-                    const vehicle = isBudgetTrip ? 'economy' : 'suv';
-                    const hotel = isBudgetTrip ? 'Cozy Budget Stay' : 'Luxury Resort';
-
-                    if (prompt.includes('beach') || prompt.includes('sea') || prompt.includes('goa')) {
-                      suggestion = {
-                        id: 'ai_goa',
-                        title: isBudgetTrip ? `Budget Goa ${duration}-Day Trip` : `Goa ${duration}-Day Luxury Escape`,
-                        desc: `${duration} Days of sun & sand. ${isBudgetTrip ? 'Affordable fun!' : 'Premium experience.'}`,
-                        price: estimatePrice(18500, duration, budget),
-                        itinerary: Array.from({ length: duration }, (_, i) => `Day ${i + 1}: ${i === 0 ? 'Arrival & Beach Walk' : (i === 1 ? 'Watersports' : (i === 2 ? 'Fort Visit & Party' : 'Leisure & Exploration'))}`).join('\n'),
-                        details: {
-                          destination: 'Goa',
-                          startDate: new Date().toISOString().split('T')[0],
-                          endDate: new Date(Date.now() + duration * 86400000).toISOString().split('T')[0],
-                          passengers: 2,
-                          vehicleType: vehicle,
-                          hotelName: isBudgetTrip ? 'Backpacker Hostel' : 'Taj Exotica',
-                          activities: generateActivities('beach', duration)
-                        }
-                      };
-                    } else if (prompt.includes('mountain') || prompt.includes('hill') || prompt.includes('cold') || prompt.includes('shimla')) {
-                      suggestion = {
-                        id: 'ai_shimla',
-                        title: isBudgetTrip ? `Budget Himalayan ${duration}-Day Trek` : `Himalayan ${duration}-Day Retreat`,
-                        desc: `${duration} Days in the mountains. ${isBudgetTrip ? 'Nature & Trails.' : 'Luxury & Comfort.'}`,
-                        price: estimatePrice(22000, duration, budget),
-                        itinerary: Array.from({ length: duration }, (_, i) => `Day ${i + 1}: ${i === 0 ? 'Arrival & Mall Road' : (i === 1 ? 'Trek/Sightseeing' : (i === 2 ? 'Snow Point Visit' : 'Relaxation & Departure'))}`).join('\n'),
-                        details: {
-                          destination: 'Shimla',
-                          startDate: new Date().toISOString().split('T')[0],
-                          endDate: new Date(Date.now() + duration * 86400000).toISOString().split('T')[0],
-                          passengers: 2,
-                          vehicleType: vehicle,
-                          hotelName: isBudgetTrip ? 'Hilltop Homestay' : 'Wildflower Hall',
-                          activities: generateActivities('mountain', duration)
-                        }
-                      };
-                    } else {
-                      suggestion = {
-                        id: 'ai_city',
-                        title: isBudgetTrip ? `Urban ${duration}-Day Budget Tour` : `Urban ${duration}-Day Explorer`,
-                        desc: `${duration}-Day city getaway. ${isBudgetTrip ? 'Smart savings.' : 'Full experience.'}`,
-                        price: estimatePrice(12000, duration, budget),
-                        itinerary: Array.from({ length: duration }, (_, i) => `Day ${i + 1}: ${i === 0 ? 'City Tour' : (i === 1 ? 'Shopping' : 'Leisure')}`).join('\n'),
-                        details: {
-                          destination: 'City Center',
-                          startDate: new Date().toISOString().split('T')[0],
-                          endDate: new Date(Date.now() + duration * 86400000).toISOString().split('T')[0],
-                          passengers: 1,
-                          vehicleType: vehicle,
-                          hotelName: isBudgetTrip ? 'City Lodge' : 'City Grand Hotel',
-                          activities: generateActivities('city', duration)
-                        }
-                      };
-                    }
-
-                    setAiSuggestion(suggestion);
-                    setShowTypewriter(true);
-                  }}
-                  className="flex flex-col md:flex-row gap-2"
-                >
-                  <input
-                    name="prompt"
-                    type="text"
-                    placeholder="e.g. A relaxing 3-day beach trip to Goa under ₹20k..."
-                    className="flex-1 bg-transparent border-none text-white placeholder-gray-300 focus:ring-0 text-lg px-4 py-2"
-                    required
-                  />
-                  <button
-                    type="submit"
-                    className="bg-white text-purple-600 hover:bg-purple-50 font-bold py-3 px-8 rounded-lg transition-all transform hover:scale-105 shadow-lg flex items-center justify-center"
-                  >
-                    <span className="mr-2">✨</span> Generate Plan
-                  </button>
-                </form>
-
-                {/* Typewriter Effect Container */}
-                {showTypewriter && aiSuggestion && (
-                  <div className="mt-4 bg-black/40 backdrop-blur-md rounded-xl p-4 border border-purple-400/30 animate-in fade-in slide-in-from-top-4 duration-500">
-                    <div className="flex justify-between items-start mb-2">
-                      <h3 className="font-bold text-xl text-yellow-300">{aiSuggestion.title}</h3>
-                      <span className="bg-green-500/20 text-green-300 text-xs px-2 py-1 rounded border border-green-500/50">{aiSuggestion.price}</span>
-                    </div>
-
-                    <div className="font-mono text-sm text-purple-100 min-h-[60px] mb-4 whitespace-pre-wrap">
-                      <Typewriter text={aiSuggestion.itinerary} speed={30} />
-                    </div>
-
-                    <div className="flex justify-end space-x-3">
-                      <button
-                        onClick={() => setShowTypewriter(false)}
-                        className="px-3 py-1 text-sm text-gray-300 hover:text-white"
-                      >
-                        Cancel
-                      </button>
-                      <button
-                        onClick={() => navigate('/rider/vacation-planner', { state: { aiSuggestion: aiSuggestion } })}
-                        className="px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg font-bold text-sm shadow-lg hover:shadow-purple-500/50 transition-all transform hover:scale-105"
-                      >
-                        Accept & Customize →
-                      </button>
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              {/* Restored Buttons */}
-              <div className="mt-6 flex flex-wrap gap-4">
-                <button
-                  onClick={() => navigate('/rider/vacation-planner')}
-                  className="bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 px-6 rounded-lg transition-colors duration-200 border border-purple-400"
-                >
-                  Manual Custom Plan
-                </button>
-                <button
-                  onClick={() => navigate('/rider/fixed-packages')}
-                  className="bg-transparent border-2 border-purple-300 text-purple-100 hover:bg-purple-800/30 hover:text-white font-semibold py-2 px-6 rounded-lg transition-colors duration-200"
-                >
-                  View Fixed Packages
-                </button>
+              <div className="flex justify-between items-baseline">
+                <span className="text-xs text-gray-400">Available Points:</span>
+                <span className="text-xl font-bold text-yellow-300">{loyaltyPoints.total_points} pts</span>
               </div>
             </div>
-
-            {/* Loyalty Card */}
-            {loyaltyPoints && (
-              <div className="hidden md:block bg-white bg-opacity-10 backdrop-blur-sm rounded-xl p-6 ml-8 border border-white/10 w-72">
-                <div className="flex items-center space-x-2 mb-2">
-                  <Award className="w-6 h-6 text-yellow-400" />
-                  <h3 className="text-xl font-bold">Loyalty Status</h3>
-                </div>
-                <div className="flex justify-between items-end mb-4">
-                  <div>
-                    <p className="text-xs text-gray-300 uppercase tracking-wider">Current Tier</p>
-                    <p className={`inline-block px-3 py-1 rounded-full text-sm font-bold mt-1 ${getTierColor(loyaltyPoints.tier)}`}>
-                      {loyaltyPoints.tier.toUpperCase()}
-                    </p>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-3xl font-bold">{loyaltyPoints.total_points}</p>
-                    <p className="text-xs text-gray-300">Points</p>
-                  </div>
-                </div>
-                <div className="w-full bg-black/30 rounded-full h-1.5 mb-2">
-                  <div className="bg-yellow-400 h-1.5 rounded-full" style={{ width: '70%' }}></div>
-                </div>
-                <p className="text-xs text-purple-200">{loyaltyPoints.benefits}</p>
-              </div>
-            )}
-          </div>
+          )}
         </div>
 
         {/* How It Works */}

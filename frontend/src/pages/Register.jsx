@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { Car, User, Mail, Lock, Phone, AlertCircle, CheckCircle } from 'lucide-react'
+import { Car, User, Mail, Lock, Phone, AlertCircle } from 'lucide-react'
 import { authService } from '../services/api'
 import { useAuthStore } from '../store/authStore'
 
@@ -23,12 +23,6 @@ export default function Register() {
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
 
-  // OTP States
-  const [otp, setOtp] = useState('')
-  const [otpSent, setOtpSent] = useState(false)
-  const [emailVerified, setEmailVerified] = useState(false)
-  const [verifyingOtp, setVerifyingOtp] = useState(false)
-
   const navigate = useNavigate()
   const login = useAuthStore((state) => state.login)
 
@@ -36,49 +30,9 @@ export default function Register() {
     setFormData({ ...formData, [e.target.name]: e.target.value })
   }
 
-  const handleSendOTP = async () => {
-    if (!formData.email) {
-      setError("Please enter an email address first.");
-      return;
-    }
-    setError('');
-    setLoading(true); // Re-use loading state for this button
-    try {
-      const response = await authService.sendEmailOTP(formData.email);
-      setOtpSent(true);
-      alert("✅ OTP sent to your email!");
-    } catch (err) {
-      setError(err.response?.data?.detail || "Failed to send OTP");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleVerifyOTP = async () => {
-    if (!otp) {
-      setError("Please enter the OTP.");
-      return;
-    }
-    setVerifyingOtp(true);
-    setError('');
-    try {
-      await authService.verifyEmailOTP(formData.email, otp);
-      setEmailVerified(true);
-    } catch (err) {
-      setError(err.response?.data?.detail || "Invalid OTP");
-    } finally {
-      setVerifyingOtp(false);
-    }
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault()
     setError('')
-
-    if (!emailVerified) {
-      setError('Please verify your email address first.');
-      return;
-    }
 
     if (formData.password !== formData.confirmPassword) {
       setError('Passwords do not match')
@@ -93,9 +47,9 @@ export default function Register() {
     setLoading(true)
 
     try {
+      let data;
       if (formData.role === 'driver') {
-        // Register as driver
-        await authService.registerDriver(
+        data = await authService.registerDriver(
           {
             name: formData.name,
             email: formData.email,
@@ -104,7 +58,7 @@ export default function Register() {
             role: 'driver'
           },
           {
-            license_number: formData.license_number || `LIC${Math.floor(Math.random() * 1000000)}`, // Fallback
+            license_number: formData.license_number || `LIC${Math.floor(Math.random() * 1000000)}`,
             vehicle_type: formData.vehicle_type,
             vehicle_model: formData.vehicle_model || 'Generic',
             vehicle_plate: formData.vehicle_plate,
@@ -112,36 +66,31 @@ export default function Register() {
             city: formData.city
           }
         )
-        // Skip phone OTP if email verified? Or keep both? 
-        // User request implied adding this *to verify actual email*.
-        // Let's assume we proceed to the phone OTP page as usual, or login directly.
-        // The original code navigated to '/verify-otp'. Let's keep that for phone verification if needed, 
-        // OR if this verification REPLACES that one.
-        // Assuming this is an EXTRA step for email validation.
-        navigate('/verify-otp', { state: { email: formData.email } })
+        login(data.access_token, data.user)
+        navigate('/driver-dashboard')
       } else {
-        // Register as rider
-        await authService.register({
+        data = await authService.register({
           name: formData.name,
           email: formData.email,
           phone: formData.phone,
           password: formData.password,
           role: 'rider'
         })
-        navigate('/verify-otp', { state: { email: formData.email } })
+        login(data.access_token, data.user)
+        navigate('/rider-dashboard')
       }
     } catch (err) {
-      let errorMessage = 'Registration failed. Please try again.';
+      let errorMessage = 'Registration failed. Please try again.'
       if (err.response?.data?.detail) {
         if (typeof err.response.data.detail === 'string') {
-          errorMessage = err.response.data.detail;
+          errorMessage = err.response.data.detail
         } else if (Array.isArray(err.response.data.detail)) {
-          errorMessage = err.response.data.detail.map(e => e.msg).join(', ');
+          errorMessage = err.response.data.detail.map(e => e.msg).join(', ')
         } else if (typeof err.response.data.detail === 'object') {
-          errorMessage = JSON.stringify(err.response.data.detail);
+          errorMessage = JSON.stringify(err.response.data.detail)
         }
       }
-      setError(errorMessage);
+      setError(errorMessage)
     } finally {
       setLoading(false)
     }
@@ -287,66 +236,20 @@ export default function Register() {
               </div>
             </div>
 
-            {/* Email & OTP Section */}
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">Email</label>
-              <div className="relative group mb-2">
+              <div className="relative group">
                 <Mail className="absolute left-3 top-3.5 w-5 h-5 text-gray-500 group-focus-within:text-primary-500 transition-colors" />
                 <input
                   type="email"
                   name="email"
                   value={formData.email}
-                  onChange={(e) => {
-                    handleChange(e);
-                    if (emailVerified) setEmailVerified(false); // Reset verification if email changes
-                  }}
-                  className={`input-field pl-10 bg-dark-900 border-dark-600 focus:border-primary-500 ${emailVerified ? 'border-green-500 focus:border-green-500' : ''}`}
+                  onChange={handleChange}
+                  className="input-field pl-10 bg-dark-900 border-dark-600 focus:border-primary-500"
                   placeholder="Enter your email"
                   required
                 />
-                {emailVerified && <CheckCircle className="absolute right-3 top-3.5 w-5 h-5 text-green-500" />}
               </div>
-
-              {!emailVerified && (
-                <div className="flex space-x-2">
-                  {!otpSent ? (
-                    <button
-                      type="button"
-                      onClick={handleSendOTP}
-                      disabled={loading || !formData.email}
-                      className="text-xs bg-primary-600 hover:bg-primary-700 text-white py-1.5 px-3 rounded transition-colors disabled:opacity-50"
-                    >
-                      {loading ? 'Sending...' : 'Generate OTP'}
-                    </button>
-                  ) : (
-                    <div className="flex items-center space-x-2 w-full animate-in fade-in slide-in-from-top-1">
-                      <input
-                        type="text"
-                        placeholder="Enter OTP"
-                        value={otp}
-                        onChange={(e) => setOtp(e.target.value)}
-                        className="input-field py-1.5 px-3 text-sm bg-dark-800 border-dark-600 w-24"
-                        maxLength={6}
-                      />
-                      <button
-                        type="button"
-                        onClick={handleVerifyOTP}
-                        disabled={verifyingOtp}
-                        className="text-xs bg-green-600 hover:bg-green-700 text-white py-1.5 px-3 rounded transition-colors"
-                      >
-                        {verifyingOtp ? 'Verifying...' : 'Verify'}
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => setOtpSent(false)}
-                        className="text-xs text-gray-400 underline hover:text-white"
-                      >
-                        Resend
-                      </button>
-                    </div>
-                  )}
-                </div>
-              )}
             </div>
 
             <div>
@@ -411,10 +314,10 @@ export default function Register() {
 
             <button
               type="submit"
-              disabled={loading || !emailVerified}
+              disabled={loading}
               className="w-full btn-primary disabled:opacity-50 disabled:cursor-not-allowed text-lg py-3.5"
             >
-              {loading ? 'Creating Account...' : !emailVerified ? 'Verify Email to Continue' : 'Create Account'}
+              {loading ? 'Creating Account...' : 'Create Account'}
             </button>
           </form>
 

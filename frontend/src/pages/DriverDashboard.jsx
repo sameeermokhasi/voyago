@@ -1620,6 +1620,7 @@ export default function DriverDashboard() {
 }
 
 function SafetyMonitor() {
+  const { user } = useAuthStore()
   const [isActive, setIsActive] = useState(false)
   const [status, setStatus] = useState('active') // active, warning
   const videoRef = useRef(null)

@@ -14,9 +14,29 @@ from app.auth import get_current_active_user
 from app.routers.vacation_scheduler import schedule_next_ride
 from app.utils import calculate_distance, calculate_fare
 from app.services.ai_visualizer import visualizer # Added
+from app.services.travel_buddy_agent import travel_buddy_agent # Added
 import json
 
 router = APIRouter()
+
+class TravelBuddyRequestModel(BaseModel):
+    city: str
+    budget: float = 10000.0
+    currency: str = "INR"
+    travel_style: str = "explorer"
+
+@router.post("/travel-buddy")
+async def generate_vacation_travel_buddy(request: TravelBuddyRequestModel):
+    """Travel Buddy Agent endpoint nested under /api/vacation/travel-buddy"""
+    try:
+        return travel_buddy_agent.execute(
+            city=request.city,
+            budget=request.budget,
+            currency=request.currency,
+            travel_style=request.travel_style or "explorer"
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 class VisualizeRequest(BaseModel):
     destination: str

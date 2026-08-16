@@ -27,20 +27,14 @@ async def register(user_data: UserCreate, db: Session = Depends(get_db)):
     # Create new user
     hashed_password = get_password_hash(user_data.password)
     
-    # Generate OTP
-    otp = "".join([str(random.randint(0, 9)) for _ in range(6)])
-    # In production, send this via SMS. For now, print to console.
-    print(f"\n{'='*50}\nOTP FOR {user_data.email}: {otp}\n{'='*50}\n")
-    
     new_user = User(
         name=user_data.name,
         email=user_data.email,
         phone=user_data.phone,
         password=hashed_password,
         role=user_data.role,
-        is_active=False, # Wait for verification
-        otp_code=otp,
-        otp_expiry=datetime.now(timezone.utc) + timedelta(minutes=10)
+        is_active=True,
+        is_verified=True
     )
     
     db.add(new_user)
@@ -137,19 +131,14 @@ async def register_driver(
     # Create new driver user
     hashed_password = get_password_hash(user_data.password)
     
-    # Generate OTP
-    otp = "".join([str(random.randint(0, 9)) for _ in range(6)])
-    print(f"\n{'='*50}\nOTP FOR {user_data.email}: {otp}\n{'='*50}\n")
-    
     new_user = User(
         name=user_data.name,
         email=user_data.email,
         phone=user_data.phone,
         password=hashed_password,
         role=UserRole.DRIVER,
-        is_active=False,
-        otp_code=otp,
-        otp_expiry=datetime.now(timezone.utc) + timedelta(minutes=10)
+        is_active=True,
+        is_verified=True
     )
     
     db.add(new_user)
