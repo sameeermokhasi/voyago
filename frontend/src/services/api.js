@@ -274,3 +274,20 @@ export const messageService = {
     return response.data
   }
 }
+
+export const travelBuddyService = {
+  async generateGuide(city, budget, currency = 'INR', travelStyle = 'explorer') {
+    const response = await api.post('travel-buddy/generate', {
+      city,
+      budget: parseFloat(budget) || 10000,
+      currency,
+      travel_style: travelStyle
+    })
+    return response.data
+  },
+
+  async getHealth() {
+    const response = await api.get('travel-buddy/health')
+    return response.data
+  }
+}

@@ -5,7 +5,7 @@ import uvicorn
 
 from app.database import engine, Base, get_db
 from app.models import User, UserRole
-from app.routers import auth, rides, users, admin, vacation, vacation_scheduler, messages
+from app.routers import auth, rides, users, admin, vacation, vacation_scheduler, messages, travel_buddy
 from app.websocket import manager
 from app.auth import decode_access_token, get_current_active_user
 from sqlalchemy.orm import Session
@@ -57,6 +57,7 @@ app.include_router(admin.router, prefix="/api/admin", tags=["Admin"])
 app.include_router(vacation.router, prefix="/api/vacation", tags=["Vacation"])
 app.include_router(vacation_scheduler.router, prefix="/api/scheduler", tags=["Vacation Scheduler"])
 app.include_router(messages.router, prefix="/api/messages", tags=["Messages"])
+app.include_router(travel_buddy.router, prefix="/api/travel-buddy", tags=["Travel Buddy Agent"])
 
 @app.get("/ping")
 async def ping():
