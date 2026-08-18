@@ -13,6 +13,8 @@
   },
   "dependencies": {
     "@googlemaps/js-api-loader": "^1.16.2",
+    "@react-three/drei": "^10.7.8",
+    "@react-three/fiber": "^9.7.0",
     "axios": "^1.6.2",
     "date-fns": "^2.30.0",
     "gsap": "^3.13.0",
@@ -23,6 +25,7 @@
     "react-dom": "^18.2.0",
     "react-leaflet": "^4.2.1",
     "react-router-dom": "^6.20.0",
+    "three": "^0.185.1",
     "zustand": "^4.4.7"
   },
   "devDependencies": {

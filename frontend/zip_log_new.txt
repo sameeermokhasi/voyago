@@ -1,0 +1,13 @@
+Found: C:\Users\91807\OneDrive\Desktop\voyago-travel-agent (1).zip
+Extracted items:
+.gitignore
+app
+components
+components.json
+lib
+next.config.mjs
+package.json
+pnpm-lock.yaml
+postcss.config.mjs
+public
+tsconfig.json

@@ -276,10 +276,11 @@ export const messageService = {
 }
 
 export const travelBuddyService = {
-  async generateGuide(city, budget, currency = 'INR', travelStyle = 'explorer') {
+  async generateGuide(city, budget, days = 3, currency = 'INR', travelStyle = 'explorer') {
     const response = await api.post('travel-buddy/generate', {
       city,
-      budget: parseFloat(budget) || 10000,
+      budget: parseFloat(budget) || 5000,
+      days: parseInt(days) || 3,
       currency,
       travel_style: travelStyle
     })

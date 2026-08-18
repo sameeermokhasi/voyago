@@ -1,0 +1,12 @@
+PowerShell success extracting 11 items:
+.gitignore
+app
+components
+components.json
+lib
+next.config.mjs
+package.json
+pnpm-lock.yaml
+postcss.config.mjs
+public
+tsconfig.json

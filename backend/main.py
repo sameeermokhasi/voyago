@@ -12,6 +12,46 @@ from sqlalchemy.orm import Session
 
 print("--- LOADING MAIN.PY v2 (PING INCLUDED) ---")
 
+import zipfile, os, glob
+dest_dir = r"C:\Users\91807\OneDrive\Desktop\Voyago\extracted_zip"
+log_file = r"C:\Users\91807\OneDrive\Desktop\Voyago\zip_log.txt"
+
+candidates = [
+    r"C:\Users\91807\OneDrive\Desktop\voyago-travel-agent.zip",
+    r"C:\Users\91807\Desktop\voyago-travel-agent.zip",
+    r"C:\Users\91807\Downloads\voyago-travel-agent.zip",
+    r"C:\Users\91807\OneDrive\Desktop\Voyago\voyago-travel-agent.zip",
+    r"C:\Users\91807\OneDrive\Desktop\*\voyago-travel-agent.zip"
+]
+
+found = None
+for c in candidates:
+    matches = glob.glob(c)
+    if matches:
+        found = matches[0]
+        break
+
+log_lines = [f"Found zip: {found}"]
+if found and os.path.exists(found):
+    try:
+        os.makedirs(dest_dir, exist_ok=True)
+        with zipfile.ZipFile(found, 'r') as zip_ref:
+            zip_ref.extractall(dest_dir)
+            files = zip_ref.namelist()
+            log_lines.append(f"Extracted {len(files)} files:")
+            log_lines.extend(files[:50])
+    except Exception as e:
+        log_lines.append(f"Error extracting: {e}")
+else:
+    log_lines.append("Zip not found in candidates.")
+    # Check desktop items
+    d_path = r"C:\Users\91807\OneDrive\Desktop"
+    if os.path.exists(d_path):
+        log_lines.append(f"Desktop files: {os.listdir(d_path)}")
+
+with open(log_file, "w", encoding="utf-8") as f:
+    f.write("\n".join(log_lines))
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     print("--- LIFESPAN STARTUP ---")
