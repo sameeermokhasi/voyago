@@ -80,15 +80,20 @@ export default function Register() {
         navigate('/rider-dashboard')
       }
     } catch (err) {
+      console.error('Registration Error Details:', err)
       let errorMessage = 'Registration failed. Please try again.'
       if (err.response?.data?.detail) {
         if (typeof err.response.data.detail === 'string') {
           errorMessage = err.response.data.detail
         } else if (Array.isArray(err.response.data.detail)) {
-          errorMessage = err.response.data.detail.map(e => e.msg).join(', ')
+          errorMessage = err.response.data.detail.map(e => e.msg || JSON.stringify(e)).join(', ')
         } else if (typeof err.response.data.detail === 'object') {
           errorMessage = JSON.stringify(err.response.data.detail)
         }
+      } else if (err.response?.data?.message) {
+        errorMessage = err.response.data.message
+      } else if (err.message) {
+        errorMessage = `${err.message}. Please ensure the backend server is running.`
       }
       setError(errorMessage)
     } finally {
