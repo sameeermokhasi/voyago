@@ -1,0 +1,54 @@
+services:
+  # 1. Pure PostgreSQL 16 Database
+  postgres:
+    image: postgres:16-alpine
+    container_name: voyago_postgres
+    restart: always
+    environment:
+      POSTGRES_USER: voyago_admin
+      POSTGRES_PASSWORD: voyago_secure_password_123
+      POSTGRES_DB: voyago_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U voyago_admin -d voyago_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # 2. Python FastAPI Backend API
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: voyago_backend
+    restart: always
+    environment:
+      - DATABASE_URL=postgresql://voyago_admin:voyago_secure_password_123@postgres:5432/voyago_db
+      - SECRET_KEY=voyago_super_jwt_secret_key_2026
+      - ALGORITHM=HS256
+      - ACCESS_TOKEN_EXPIRE_MINUTES=1440
+      - GROQ_API_KEY=${GROQ_API_KEY:-""}
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-""}
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  # 3. React Production Frontend
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: voyago_frontend
+    restart: always
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:
