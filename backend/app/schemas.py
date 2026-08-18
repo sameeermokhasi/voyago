@@ -76,7 +76,7 @@ class UserResponse(UserBase):
     profile_picture: Optional[str] = None
     wallet_balance: float = 0.0
     address: Optional[str] = None
-    created_at: datetime
+    created_at: Optional[datetime] = None
     driver_profile: Optional[DriverProfileResponse] = None
     
     class Config:
