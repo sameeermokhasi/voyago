@@ -125,7 +125,7 @@ class RideCreate(BaseModel):
 class RideResponse(BaseModel):
     id: int
     rider_id: int
-    driver_id: Optional[int]
+    driver_id: Optional[int] = None
     vacation_id: Optional[int] = None
     pickup_address: str
     pickup_lat: float
@@ -135,16 +135,16 @@ class RideResponse(BaseModel):
     destination_lng: float
     status: RideStatus
     vehicle_type: VehicleType
-    distance_km: Optional[float]
-    duration_minutes: Optional[int]
-    estimated_fare: Optional[float]
-    final_fare: Optional[float]
-    rating: Optional[int]
+    distance_km: Optional[float] = None
+    duration_minutes: Optional[int] = None
+    estimated_fare: Optional[float] = None
+    final_fare: Optional[float] = None
+    rating: Optional[int] = None
     feedback: Optional[str] = None
-    scheduled_time: Optional[datetime]
-    created_at: datetime
-    started_at: Optional[datetime]
-    completed_at: Optional[datetime]
+    scheduled_time: Optional[datetime] = None
+    created_at: Optional[datetime] = None
+    started_at: Optional[datetime] = None
+    completed_at: Optional[datetime] = None
     
     # Nested objects for frontend display
     rider: Optional[UserResponse] = None
