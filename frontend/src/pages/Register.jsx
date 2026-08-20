@@ -48,6 +48,8 @@ export default function Register() {
 
     try {
       let data;
+      const currentPort = window.location.port;
+
       if (formData.role === 'driver') {
         data = await authService.registerDriver(
           {
@@ -66,8 +68,6 @@ export default function Register() {
             city: formData.city
           }
         )
-        login(data.access_token, data.user)
-        navigate('/driver-dashboard')
       } else {
         data = await authService.register({
           name: formData.name,
@@ -76,9 +76,24 @@ export default function Register() {
           password: formData.password,
           role: 'rider'
         })
-        login(data.access_token, data.user)
-        navigate('/rider-dashboard')
       }
+
+      const role = data.user.role;
+      let targetPort = '';
+      
+      if (role === 'rider') targetPort = '5000';
+      else if (role === 'driver') targetPort = '6001';
+      else if (role === 'admin') targetPort = '7001';
+
+      if (currentPort !== targetPort && targetPort !== '') {
+         const userStr = encodeURIComponent(JSON.stringify(data.user));
+         window.location.href = `http://127.0.0.1:${targetPort}/?token=${data.access_token}&user=${userStr}`;
+         return;
+      }
+
+      login(data.access_token, data.user)
+      if (role === 'driver') navigate('/driver')
+      else navigate('/rider')
     } catch (err) {
       let errorMessage = 'Registration failed. Please try again.'
       if (err.response?.data?.detail) {
