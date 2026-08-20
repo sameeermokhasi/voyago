@@ -68,10 +68,18 @@ export default function Login() {
       const role = data.user.role
       // ... (existing port redirection logic preserved if needed, but standard flow follows role) ...
 
-      // Port Redirection Logic (Legacy/Dev Support)
-      const currentPort = window.location.port
-      if (role === 'driver' && currentPort !== '6001' && currentPort !== '') {
-        // alert("Redirecting to Driver App..."); // Optional
+      const currentPort = window.location.port;
+      let targetPort = '';
+      
+      if (role === 'rider') targetPort = '5000';
+      else if (role === 'driver') targetPort = '6001';
+      else if (role === 'admin') targetPort = '7001';
+
+      if (currentPort !== targetPort && targetPort !== '') {
+         // Redirect to the correct port, passing token and user
+         const userStr = encodeURIComponent(JSON.stringify(data.user));
+         window.location.href = `http://127.0.0.1:${targetPort}/?token=${data.access_token}&user=${userStr}`;
+         return; // Stop execution here
       }
 
       login(data.access_token, data.user)
