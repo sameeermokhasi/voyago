@@ -21,52 +21,59 @@ async def register(user_data: UserCreate, db: Session = Depends(get_db)):
     if existing_user:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Email already registered"
+            detail="Email already registered. Please log in instead."
         )
     
     # Create new user
     hashed_password = get_password_hash(user_data.password)
     
-    new_user = User(
-        name=user_data.name,
-        email=user_data.email,
-        phone=user_data.phone,
-        password=hashed_password,
-        role=user_data.role,
-        is_active=True,
-        is_verified=True
-    )
-    
-    db.add(new_user)
-    db.commit()
-    db.refresh(new_user)
-    
-    # Create loyalty points for riders
-    if new_user.role == UserRole.RIDER:
-        loyalty = LoyaltyPoints(user_id=new_user.id)
-        db.add(loyalty)
-    
-    # Create driver profile for drivers
-    if new_user.role == UserRole.DRIVER:
-        # Generate a default license number
-        license_number = f"LIC{new_user.id:06d}"
-        driver_profile = DriverProfile(
-            user_id=new_user.id,
-            license_number=license_number,
-            is_available=False  # Default to offline until they toggle availability
+    try:
+        new_user = User(
+            name=user_data.name,
+            email=user_data.email,
+            phone=user_data.phone,
+            password=hashed_password,
+            role=user_data.role,
+            is_active=True,
+            is_verified=True
         )
-        db.add(driver_profile)
-    
-    db.commit()
-    
-    # Create access token
-    access_token = create_access_token(data={"sub": new_user.email})
-    
-    return {
-        "access_token": access_token,
-        "token_type": "bearer",
-        "user": new_user
-    }
+        
+        db.add(new_user)
+        db.commit()
+        db.refresh(new_user)
+        
+        # Create loyalty points for riders
+        if new_user.role == UserRole.RIDER:
+            loyalty = LoyaltyPoints(user_id=new_user.id)
+            db.add(loyalty)
+            db.commit()
+        
+        # Create driver profile for drivers
+        if new_user.role == UserRole.DRIVER:
+            license_number = f"LIC{new_user.id:06d}"
+            driver_profile = DriverProfile(
+                user_id=new_user.id,
+                license_number=license_number,
+                is_available=False
+            )
+            db.add(driver_profile)
+            db.commit()
+        
+        # Create access token
+        access_token = create_access_token(data={"sub": new_user.email})
+        
+        return {
+            "access_token": access_token,
+            "token_type": "bearer",
+            "user": new_user
+        }
+    except Exception as e:
+        db.rollback()
+        print(f"--- REGISTRATION ERROR: {e} ---")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Registration failed: {str(e)}"
+        )
 
 @router.post("/login", response_model=Token)
 async def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):

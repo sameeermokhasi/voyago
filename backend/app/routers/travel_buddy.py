@@ -8,6 +8,7 @@ router = APIRouter()
 class TravelBuddyRequest(BaseModel):
     city: str = Field(..., description="Destination city name, e.g., 'Goa', 'Paris', 'Tokyo'")
     budget: float = Field(default=10000.0, description="Total budget amount")
+    days: Optional[int] = Field(default=3, description="Duration in days, e.g. 2, 3, 4, 5, 7")
     currency: str = Field(default="INR", description="Currency symbol/code, e.g. 'INR', 'USD', 'EUR'")
     travel_style: Optional[str] = Field(default="explorer", description="Travel vibe: 'explorer', 'foodie', 'relaxed', 'adventure'")
 
@@ -20,14 +21,15 @@ class TravelBuddyResponse(BaseModel):
 @router.post("/generate", response_model=TravelBuddyResponse, status_code=status.HTTP_200_OK)
 async def generate_travel_guide(request: TravelBuddyRequest):
     """
-    Execute The Travel Buddy Agent:
+    Execute VOYO:
     Autonomously searches for top 3 affordable restaurants, live weather forecast,
-    and local events happening this week, formatting the results into a clean markdown document.
+    and local events happening this week, formatting the results into a clean structured document.
     """
     try:
         result = travel_buddy_agent.execute(
             city=request.city,
             budget=request.budget,
+            days=request.days or 3,
             currency=request.currency,
             travel_style=request.travel_style or "explorer"
         )

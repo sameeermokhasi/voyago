@@ -37,21 +37,37 @@ export default function VacationSchedulePlanner() {
 
   // Pre-fill from AI Suggestion
   useEffect(() => {
-    if (location.state && location.state.aiSuggestion && location.state.aiSuggestion.details) {
-      const details = location.state.aiSuggestion.details;
-      console.log("Auto-filling from AI:", details);
+    if (location.state && location.state.aiSuggestion) {
+      const ai = location.state.aiSuggestion;
+      const details = ai.details || {};
+      console.log("Auto-filling from AI Plan:", ai, details);
+
+      const destName = details.destination || (ai.destination ? `${ai.destination}, India` : '');
+      const startD = details.startDate || '';
+      const endD = details.endDate || '';
 
       setTripDetails(prev => ({
         ...prev,
-        destination: details.destination || '',
-        startDate: details.startDate || '',
-        endDate: details.endDate || '',
-        passengers: details.passengers || 1,
-        vehicleType: details.vehicleType || 'economy',
-        hotelName: details.hotelName || ''
+        destination: destName,
+        startDate: startD,
+        endDate: endD,
+        passengers: details.passengers || 2,
+        vehicleType: details.vehicleType || (ai.tier?.key === 'luxury' ? 'luxury' : ai.tier?.key === 'better' ? 'suv' : 'economy'),
+        rideIncluded: true,
+        hotelName: details.hotelName || (ai.destination ? `The Grand ${ai.destination} Resort & Palace` : '')
       }));
 
-      if (details.activities) {
+      // Pre-fill Travel / Flight Details
+      setFlightDetails({
+        departureCity: details.flightDetails?.departureCity || 'Bangalore',
+        arrivalCity: details.flightDetails?.arrivalCity || ai.destination || '',
+        departureTime: details.flightDetails?.departureTime || (startD ? `${startD}T08:30` : ''),
+        arrivalTime: details.flightDetails?.arrivalTime || (startD ? `${startD}T11:45` : ''),
+        flightNumber: details.flightDetails?.flightNumber || 'VY-842'
+      });
+
+      // Pre-fill Activities Schedule
+      if (details.activities && details.activities.length > 0) {
         setActivities(details.activities);
       }
     }

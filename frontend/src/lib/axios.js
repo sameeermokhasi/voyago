@@ -23,11 +23,11 @@ const getStorageKey = () => {
 }
 
 const api = axios.create({
-  baseURL: '/api',
+  baseURL: import.meta.env.VITE_API_URL ? `${import.meta.env.VITE_API_URL.replace(/\/$/, '')}/api/` : '/api/',
   headers: {
     'Content-Type': 'application/json',
   },
-  timeout: 30000,
+  timeout: 90000,
 })
 
 api.interceptors.request.use((config) => {

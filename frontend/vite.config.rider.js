@@ -5,7 +5,7 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   server: {
-    host: '127.0.0.1', // Explicitly bind to IPv4 localhost
+    host: '127.0.0.1',
     port: 5000,
     proxy: {
       '/api': {
@@ -13,6 +13,6 @@ export default defineConfig({
         changeOrigin: true,
       }
     },
-    open: true, // Open browser automatically
+    open: false,
   }
 })

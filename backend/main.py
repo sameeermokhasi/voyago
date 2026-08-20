@@ -49,15 +49,23 @@ async def log_requests(request: Request, call_next):
     print(f"--- RESPONSE: {response.status_code} ---")
     return response
 
-# Include routers
+# Include routers (Both /api/* and direct /* for all proxies)
 app.include_router(auth.router, prefix="/api/auth", tags=["Authentication"])
+app.include_router(auth.router, prefix="/auth", tags=["Authentication (Direct)"])
 app.include_router(rides.router, prefix="/api/rides", tags=["Rides"])
+app.include_router(rides.router, prefix="/rides", tags=["Rides (Direct)"])
 app.include_router(users.router, prefix="/api/users", tags=["Users"])
+app.include_router(users.router, prefix="/users", tags=["Users (Direct)"])
 app.include_router(admin.router, prefix="/api/admin", tags=["Admin"])
+app.include_router(admin.router, prefix="/admin", tags=["Admin (Direct)"])
 app.include_router(vacation.router, prefix="/api/vacation", tags=["Vacation"])
+app.include_router(vacation.router, prefix="/vacation", tags=["Vacation (Direct)"])
 app.include_router(vacation_scheduler.router, prefix="/api/scheduler", tags=["Vacation Scheduler"])
+app.include_router(vacation_scheduler.router, prefix="/scheduler", tags=["Vacation Scheduler (Direct)"])
 app.include_router(messages.router, prefix="/api/messages", tags=["Messages"])
+app.include_router(messages.router, prefix="/messages", tags=["Messages (Direct)"])
 app.include_router(travel_buddy.router, prefix="/api/travel-buddy", tags=["Travel Buddy Agent"])
+app.include_router(travel_buddy.router, prefix="/travel-buddy", tags=["Travel Buddy (Direct)"])
 
 @app.get("/ping")
 async def ping():

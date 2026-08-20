@@ -125,7 +125,7 @@ export default function VacationBooking() {
         />
 
         {/* Quick Navigation & Loyalty Points Status Bar */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-6 mb-8 items-center">
+        <div className="mt-12 mb-8 grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
           {/* Quick Action Navigation Buttons */}
           <div className="md:col-span-8 flex flex-wrap gap-4">
             <button

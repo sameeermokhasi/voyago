@@ -1,0 +1,36 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "https://voyagoweb.onrender.com/api/$1"
+    },
+    {
+      "source": "/auth/(.*)",
+      "destination": "https://voyagoweb.onrender.com/auth/$1"
+    },
+    {
+      "source": "/rides/(.*)",
+      "destination": "https://voyagoweb.onrender.com/rides/$1"
+    },
+    {
+      "source": "/users/(.*)",
+      "destination": "https://voyagoweb.onrender.com/users/$1"
+    },
+    {
+      "source": "/vacation/(.*)",
+      "destination": "https://voyagoweb.onrender.com/vacation/$1"
+    },
+    {
+      "source": "/scheduler/(.*)",
+      "destination": "https://voyagoweb.onrender.com/scheduler/$1"
+    },
+    {
+      "source": "/travel-buddy/(.*)",
+      "destination": "https://voyagoweb.onrender.com/travel-buddy/$1"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}

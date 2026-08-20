@@ -153,6 +153,262 @@ def get_weather_forecast(city: str) -> Dict[str, Any]:
 # ==============================================================================
 
 CURATED_RESTAURANTS_DB = {
+    "chikmagalur": [
+        {
+            "name": "Town Canteen (Since 1966)",
+            "cuisine": "World-Famous Malnad Benne Dosa & Filter Kaapi",
+            "location": "RG Road / MG Road, Chikmagalur Town",
+            "price_for_two": "₹180 - ₹350",
+            "cost_level": "$",
+            "signature_dishes": "Crispy Butter Masala Dosa, Hot Gulab Jamun, Pure Filter Coffee",
+            "rating": "4.7/5 (6.8k reviews)",
+            "budget_vibe": "Chikmagalur's legendary breakfast institution, famous across Karnataka for melt-in-mouth butter dosas."
+        },
+        {
+            "name": "Siri Coffee & Plantation Rest Stop",
+            "cuisine": "Malnad Snacks, Akki Roti & Fresh Estate Brews",
+            "location": "KM Road, Near Allampura (Giant Stone Statue)",
+            "price_for_two": "₹250 - ₹450",
+            "cost_level": "$",
+            "signature_dishes": "Malnad Akki Roti with Coconut Chutney, Crispy Mirchi Bajji, Robusta Filter Coffee",
+            "rating": "4.5/5 (5.1k reviews)",
+            "budget_vibe": "Surrounded by sprawling coffee plantations, perfect scenic stop for fresh brews and local snacks."
+        },
+        {
+            "name": "The Planters Court / Vishnu Delicacy",
+            "cuisine": "Traditional Malnad Vegetarian Thali & Neer Dosa",
+            "location": "Indira Gandhi Road / Post Office Road",
+            "price_for_two": "₹350 - ₹600",
+            "cost_level": "$$",
+            "signature_dishes": "Unlimited Malnad Veg Thali, Soft Neer Dosa with Veg Sagu, Kesari Bath",
+            "rating": "4.4/5 (3.2k reviews)",
+            "budget_vibe": "Wholesome, hygienic traditional thalis that recharge you after mountain trekking."
+        }
+    ],
+    "chikkamagaluru": [
+        {
+            "name": "Town Canteen (Since 1966)",
+            "cuisine": "World-Famous Malnad Benne Dosa & Filter Kaapi",
+            "location": "RG Road / MG Road, Chikmagalur Town",
+            "price_for_two": "₹180 - ₹350",
+            "cost_level": "$",
+            "signature_dishes": "Crispy Butter Masala Dosa, Hot Gulab Jamun, Pure Filter Coffee",
+            "rating": "4.7/5 (6.8k reviews)",
+            "budget_vibe": "Chikmagalur's legendary breakfast institution, famous across Karnataka for melt-in-mouth butter dosas."
+        },
+        {
+            "name": "Siri Coffee & Plantation Rest Stop",
+            "cuisine": "Malnad Snacks, Akki Roti & Fresh Estate Brews",
+            "location": "KM Road, Near Allampura (Giant Stone Statue)",
+            "price_for_two": "₹250 - ₹450",
+            "cost_level": "$",
+            "signature_dishes": "Malnad Akki Roti with Coconut Chutney, Crispy Mirchi Bajji, Robusta Filter Coffee",
+            "rating": "4.5/5 (5.1k reviews)",
+            "budget_vibe": "Surrounded by sprawling coffee plantations, perfect scenic stop for fresh brews and local snacks."
+        },
+        {
+            "name": "The Planters Court / Vishnu Delicacy",
+            "cuisine": "Traditional Malnad Vegetarian Thali & Neer Dosa",
+            "location": "Indira Gandhi Road / Post Office Road",
+            "price_for_two": "₹350 - ₹600",
+            "cost_level": "$$",
+            "signature_dishes": "Unlimited Malnad Veg Thali, Soft Neer Dosa with Veg Sagu, Kesari Bath",
+            "rating": "4.4/5 (3.2k reviews)",
+            "budget_vibe": "Wholesome, hygienic traditional thalis that recharge you after mountain trekking."
+        }
+    ],
+    "chickmagalur": [
+        {
+            "name": "Town Canteen (Since 1966)",
+            "cuisine": "World-Famous Malnad Benne Dosa & Filter Kaapi",
+            "location": "RG Road / MG Road, Chikmagalur Town",
+            "price_for_two": "₹180 - ₹350",
+            "cost_level": "$",
+            "signature_dishes": "Crispy Butter Masala Dosa, Hot Gulab Jamun, Pure Filter Coffee",
+            "rating": "4.7/5 (6.8k reviews)",
+            "budget_vibe": "Chikmagalur's legendary breakfast institution, famous across Karnataka for melt-in-mouth butter dosas."
+        },
+        {
+            "name": "Siri Coffee & Plantation Rest Stop",
+            "cuisine": "Malnad Snacks, Akki Roti & Fresh Estate Brews",
+            "location": "KM Road, Near Allampura (Giant Stone Statue)",
+            "price_for_two": "₹250 - ₹450",
+            "cost_level": "$",
+            "signature_dishes": "Malnad Akki Roti with Coconut Chutney, Crispy Mirchi Bajji, Robusta Filter Coffee",
+            "rating": "4.5/5 (5.1k reviews)",
+            "budget_vibe": "Surrounded by sprawling coffee plantations, perfect scenic stop for fresh brews and local snacks."
+        },
+        {
+            "name": "The Planters Court / Vishnu Delicacy",
+            "cuisine": "Traditional Malnad Vegetarian Thali & Neer Dosa",
+            "location": "Indira Gandhi Road / Post Office Road",
+            "price_for_two": "₹350 - ₹600",
+            "cost_level": "$$",
+            "signature_dishes": "Unlimited Malnad Veg Thali, Soft Neer Dosa with Veg Sagu, Kesari Bath",
+            "rating": "4.4/5 (3.2k reviews)",
+            "budget_vibe": "Wholesome, hygienic traditional thalis that recharge you after mountain trekking."
+        }
+    ],
+    "coorg": [
+        {
+            "name": "Taste of Coorg",
+            "cuisine": "Authentic Kodava Pork, Kadambuttu & Akki Roti",
+            "location": "Stuart Hill, Madikeri",
+            "price_for_two": "₹450 - ₹750",
+            "cost_level": "$$",
+            "signature_dishes": "Authentic Pandi Curry, Kadambuttu (Rice Dumplings), Bamboo Shoot Curry",
+            "rating": "4.6/5 (4.2k reviews)",
+            "budget_vibe": "The gold standard for homemade Kodava recipes at humble family prices."
+        },
+        {
+            "name": "Raintree Restaurant",
+            "cuisine": "Coastal & Traditional Kodava Dining",
+            "location": "Pension Lane, Madikeri",
+            "price_for_two": "₹600 - ₹950",
+            "cost_level": "$$",
+            "signature_dishes": "Coorg Pepper Chicken, Noolputtu with Koli Curry, Filter Kaapi",
+            "rating": "4.5/5 (3.8k reviews)",
+            "budget_vibe": "Heritage bungalow dining setting surrounded by misty hills."
+        },
+        {
+            "name": "Coorg Cuisine",
+            "cuisine": "Kodava Homestyle Meals",
+            "location": "Opposite Post Office, Madikeri",
+            "price_for_two": "₹350 - ₹600",
+            "cost_level": "$",
+            "signature_dishes": "Paputtu, Pandi Fry, Mango Curry with Akki Roti",
+            "rating": "4.4/5 (2.9k reviews)",
+            "budget_vibe": "Authentic local favorites without any tourist markups."
+        }
+    ],
+    "ladakh": [
+        {
+            "name": "The Tibetan Kitchen",
+            "cuisine": "Himalayan, Tibetan & Ladakhi Delicacies",
+            "location": "Fort Road, Leh",
+            "price_for_two": "₹500 - ₹850",
+            "cost_level": "$$",
+            "signature_dishes": "Steamed Mok-Mok (Momos), Gyathuk Noodle Soup, Tingmo Bread with Shapta",
+            "rating": "4.6/5 (5.4k reviews)",
+            "budget_vibe": "Cozy apricot-shaded courtyard, essential high-altitude comfort food."
+        },
+        {
+            "name": "Gesmo Restaurant (Since 1989)",
+            "cuisine": "Tibetan Bakery, Yak Cheese Pizza & Breakfast",
+            "location": "Old Fort Road, Leh",
+            "price_for_two": "₹350 - ₹600",
+            "cost_level": "$",
+            "signature_dishes": "Fresh Cinnamon Rolls, Yak Cheese Pizza, Hot Seabuckthorn Tea",
+            "rating": "4.5/5 (4.1k reviews)",
+            "budget_vibe": "Beloved backpacker landmark known for generous portions and warm fireplace ambiance."
+        },
+        {
+            "name": "Bon Appetit",
+            "cuisine": "Ladakhi Fusion & Mountain Views",
+            "location": "Changspa Lane, Leh",
+            "price_for_two": "₹600 - ₹950",
+            "cost_level": "$$",
+            "signature_dishes": "Ladakhi Khambir Bread, Roasted Trout, Apricot Crumble",
+            "rating": "4.6/5 (3.1k reviews)",
+            "budget_vibe": "Stunning minimalist stone architecture with panoramic views of the Stok Kangri peaks."
+        }
+    ],
+    "leh": [
+        {
+            "name": "The Tibetan Kitchen",
+            "cuisine": "Himalayan, Tibetan & Ladakhi Delicacies",
+            "location": "Fort Road, Leh",
+            "price_for_two": "₹500 - ₹850",
+            "cost_level": "$$",
+            "signature_dishes": "Steamed Mok-Mok (Momos), Gyathuk Noodle Soup, Tingmo Bread with Shapta",
+            "rating": "4.6/5 (5.4k reviews)",
+            "budget_vibe": "Cozy apricot-shaded courtyard, essential high-altitude comfort food."
+        },
+        {
+            "name": "Gesmo Restaurant (Since 1989)",
+            "cuisine": "Tibetan Bakery, Yak Cheese Pizza & Breakfast",
+            "location": "Old Fort Road, Leh",
+            "price_for_two": "₹350 - ₹600",
+            "cost_level": "$",
+            "signature_dishes": "Fresh Cinnamon Rolls, Yak Cheese Pizza, Hot Seabuckthorn Tea",
+            "rating": "4.5/5 (4.1k reviews)",
+            "budget_vibe": "Beloved backpacker landmark known for generous portions and warm fireplace ambiance."
+        },
+        {
+            "name": "Bon Appetit",
+            "cuisine": "Ladakhi Fusion & Mountain Views",
+            "location": "Changspa Lane, Leh",
+            "price_for_two": "₹600 - ₹950",
+            "cost_level": "$$",
+            "signature_dishes": "Ladakhi Khambir Bread, Roasted Trout, Apricot Crumble",
+            "rating": "4.6/5 (3.1k reviews)",
+            "budget_vibe": "Stunning minimalist stone architecture with panoramic views of the Stok Kangri peaks."
+        }
+    ],
+    "gokarna": [
+        {
+            "name": "Namaste Cafe",
+            "cuisine": "Coastal Seafood & Continental Bowls",
+            "location": "Om Beach (Waterfront)",
+            "price_for_two": "₹450 - ₹800",
+            "cost_level": "$$",
+            "signature_dishes": "Kingfish Rava Fry, Nutella Banana Pancake, Iced Lemon Tea",
+            "rating": "4.5/5 (7.8k reviews)",
+            "budget_vibe": "Iconic beachside perch directly overlooking the waves of Om Beach."
+        },
+        {
+            "name": "Chez Christophe",
+            "cuisine": "French Bakery & Garden Eats",
+            "location": "Kudle Beach Road",
+            "price_for_two": "₹400 - ₹700",
+            "cost_level": "$",
+            "signature_dishes": "Handmade Sourdough, Shakshuka, Fresh Passion Fruit Juice",
+            "rating": "4.6/5 (2.4k reviews)",
+            "budget_vibe": "Laid-back bohemian garden setting with live acoustic music."
+        },
+        {
+            "name": "Mantra Cafe",
+            "cuisine": "North Indian & Wood-fired Pizzas",
+            "location": "Zostel Cliff, Kudle Beach",
+            "price_for_two": "₹500 - ₹850",
+            "cost_level": "$$",
+            "signature_dishes": "Thin Crust Pizza, Butter Chicken, Cold Coffee",
+            "rating": "4.5/5 (3.9k reviews)",
+            "budget_vibe": "Cliff-edge sunset vista with 180-degree Arabian Sea panorama."
+        }
+    ],
+    "hampi": [
+        {
+            "name": "Mango Tree Restaurant",
+            "cuisine": "Thalis, Israeli Platters & Fresh Shakes",
+            "location": "Janana Enclosure Road, Kamalapur",
+            "price_for_two": "₹350 - ₹600",
+            "cost_level": "$",
+            "signature_dishes": "Unlimited South Indian Thali on Banana Leaf, Falafel Bowl, Mango Lassi",
+            "rating": "4.6/5 (8.2k reviews)",
+            "budget_vibe": "Legendary traveler haven with floor seating under banana trees."
+        },
+        {
+            "name": "Laughing Buddha Cafe",
+            "cuisine": "Continental, Woodfired Pizzas & Smoothies",
+            "location": "Hippy Island / Sanapur",
+            "price_for_two": "₹400 - ₹700",
+            "cost_level": "$",
+            "signature_dishes": "Wood-fired Pizza, Hummus Platter, Nutella Milkshake",
+            "rating": "4.4/5 (4.1k reviews)",
+            "budget_vibe": "Bouldering & river sunset vistas with mattress floor seating."
+        },
+        {
+            "name": "Gopi Guesthouse Rooftop",
+            "cuisine": "South & North Indian Favorites",
+            "location": "Near Virupaksha Temple",
+            "price_for_two": "₹300 - ₹550",
+            "cost_level": "$",
+            "signature_dishes": "Crispy Dosa, Paneer Butter Masala, Ginger Lemon Tea",
+            "rating": "4.4/5 (2.1k reviews)",
+            "budget_vibe": "Sit directly facing the ancient monolithic gopuram of Virupaksha Temple."
+        }
+    ],
     "goa": [
         {
             "name": "Vinayak Family Restaurant",
@@ -248,70 +504,6 @@ CURATED_RESTAURANTS_DB = {
             "rating": "4.6/5 (11k reviews)",
             "budget_vibe": "Crispy golden butter dosas at pocket-friendly student and family prices."
         }
-    ],
-    "paris": [
-        {
-            "name": "Bouillon Chartier",
-            "cuisine": "Classic French Bistro Fare",
-            "location": "Grands Boulevards (9th Arrondissement)",
-            "price_for_two": "€25 - €40",
-            "cost_level": "$",
-            "signature_dishes": "Duck Confit, Steak Frites, Chocolate Mousse",
-            "rating": "4.4/5 (18k reviews)",
-            "budget_vibe": "Historic 1896 Belle Époque dining hall offering authentic 3-course French meals under €15/person."
-        },
-        {
-            "name": "L'As du Fallafel",
-            "cuisine": "Middle Eastern Street Food",
-            "location": "Rue des Rosiers, Le Marais",
-            "price_for_two": "€16 - €24",
-            "cost_level": "$",
-            "signature_dishes": "Special Pita Falafel with fried eggplant & tahini",
-            "rating": "4.6/5 (12k reviews)",
-            "budget_vibe": "Famous worldwide, ultra-filling gourmet street food in Paris' trendy art district."
-        },
-        {
-            "name": "Chez Gladines",
-            "cuisine": "Southwestern Basque French",
-            "location": "Butte-aux-Cailles (13th Arrondissement)",
-            "price_for_two": "€28 - €45",
-            "cost_level": "$$",
-            "signature_dishes": "Giant Salade Basque, Duck Breast with Cantal Potatoes",
-            "rating": "4.5/5 (5.4k reviews)",
-            "budget_vibe": "Huge convivial portions, bustling student quarter atmosphere, great wine carafe prices."
-        }
-    ],
-    "tokyo": [
-        {
-            "name": "Ichiran Ramen Shibuya",
-            "cuisine": "Tonkotsu Ramen (Solo Booths)",
-            "location": "Jinnan, Shibuya",
-            "price_for_two": "¥1,800 - ¥2,800 (~$12 - $18)",
-            "cost_level": "$",
-            "signature_dishes": "Customized Tonkotsu Broth with Chashu Pork & Secret Red Sauce",
-            "rating": "4.6/5 (8k reviews)",
-            "budget_vibe": "High quality artisanal ramen ordered via vending machine in private focus booths."
-        },
-        {
-            "name": "Torikizoku Shinjuku",
-            "cuisine": "Yakitori & Izakaya Pub Bites",
-            "location": "Kabukicho, Shinjuku",
-            "price_for_two": "¥2,500 - ¥3,800 (~$16 - $25)",
-            "cost_level": "$",
-            "signature_dishes": "Tare Glazed Chicken Skewers, Cabbage Bowl, Cold Draft Beers",
-            "rating": "4.4/5 (4.1k reviews)",
-            "budget_vibe": "Every single food and drink item is fixed at a flat budget rate (~¥360 each)."
-        },
-        {
-            "name": "Nemuro Hanamaru Sushi",
-            "cuisine": "Conveyor Belt Fresh Sushi",
-            "location": "KITTE Marunouchi, Tokyo Station",
-            "price_for_two": "¥2,400 - ¥4,000 (~$16 - $27)",
-            "cost_level": "$$",
-            "signature_dishes": "Hokkaido Salmon, Fatty Tuna (Otoro), Scallop Nigiri",
-            "rating": "4.5/5 (3.5k reviews)",
-            "budget_vibe": "Tsukiji market fresh sashimi at a fraction of high-end Ginza omakase pricing."
-        }
     ]
 }
 
@@ -322,17 +514,17 @@ def search_affordable_restaurants(city: str, budget: float, currency: str = "INR
     """
     clean_city = city.lower().strip()
     
-    # Check if city exists in curated database
+    # Check if city exists in curated database (supports aliases)
     matched_key = None
     for k in CURATED_RESTAURANTS_DB.keys():
-        if k in clean_city or clean_city in k:
+        if k in clean_city or clean_city in k or (k.startswith("chik") and clean_city.startswith("chik")):
             matched_key = k
             break
             
     if matched_key:
         return CURATED_RESTAURANTS_DB[matched_key]
         
-    # Smart Autonomous Generator for any global city
+    # Smart Autonomous Generator for any Indian city
     sym = "₹" if currency.upper() in ["INR", "RS"] else ("$" if currency.upper() in ["USD", "CAD", "AUD"] else "€")
     meal_unit = budget * 0.08 if budget > 0 else 500
     
@@ -343,7 +535,7 @@ def search_affordable_restaurants(city: str, budget: float, currency: str = "INR
             "location": f"Old Town / Central Market, {city.title()}",
             "price_for_two": f"{sym}{int(meal_unit * 0.6)} - {sym}{int(meal_unit * 1.1)}",
             "cost_level": "$",
-            "signature_dishes": f"Chef's Traditional Tasting Plate, Fresh {city.title()} Breads, House Special Stew",
+            "signature_dishes": f"Chef's Traditional Tasting Thali, Fresh {city.title()} Breads",
             "rating": "4.6/5 (1.4k reviews)",
             "budget_vibe": "Locally celebrated casual eatery known for homestyle recipes and generous family-style portions."
         },
@@ -353,9 +545,9 @@ def search_affordable_restaurants(city: str, budget: float, currency: str = "INR
             "location": f"Market Square, {city.title()}",
             "price_for_two": f"{sym}{int(meal_unit * 0.4)} - {sym}{int(meal_unit * 0.8)}",
             "cost_level": "$",
-            "signature_dishes": "Signature Roasted Skewers, Handmade Dumplings / Wraps, Spiced Herbal Tea",
+            "signature_dishes": "Signature Roasted Skewers, Handmade Savories / Chaat, Spiced Herbal Tea",
             "rating": "4.5/5 (2.2k reviews)",
-            "budget_vibe": "Fast-paced, vibrant culinary spot favored by university students and working locals."
+            "budget_vibe": "Fast-paced, vibrant culinary spot favored by locals."
         },
         {
             "name": f"{city.title()} Garden Bistro & Cafe",
@@ -363,7 +555,7 @@ def search_affordable_restaurants(city: str, budget: float, currency: str = "INR
             "location": f"Arts District, {city.title()}",
             "price_for_two": f"{sym}{int(meal_unit * 0.8)} - {sym}{int(meal_unit * 1.3)}",
             "cost_level": "$$",
-            "signature_dishes": "Wood-fired Flatbreads, Crispy Herb Fries, Fresh Berry Lemonade",
+            "signature_dishes": "Wood-fired Flatbreads, Crispy Masala Fries, Fresh Juice",
             "rating": "4.4/5 (950 reviews)",
             "budget_vibe": "Charming courtyard setting with cozy music, great lunch set discounts."
         }
@@ -375,6 +567,134 @@ def search_affordable_restaurants(city: str, budget: float, currency: str = "INR
 # ==============================================================================
 
 CURATED_EVENTS_DB = {
+    "chikmagalur": [
+        {
+            "title": "Mullayanagiri Peak Sunrise & Cloud Trek",
+            "category": "🌄 Highest Peak Trek (1,930m)",
+            "days": "Daily at Dawn (5:30 AM - 9:30 AM)",
+            "venue": "Mullayanagiri Peak Ridge (Highest Summit in Karnataka)",
+            "entry": "Free Summit Access",
+            "highlight": "Breathtaking 360° panoramic view above rolling cloud blankets from Karnataka's highest peak, followed by Baba Budangiri ridge hike."
+        },
+        {
+            "title": "Netravati Peak & Kudremukh Green Valley Trail",
+            "category": "🌿 Western Ghats Valley Trek",
+            "days": "Saturday & Sunday (6:00 AM - 2:00 PM)",
+            "venue": "Netravati Peak Trailhead, Samse / Kudremukh Range",
+            "entry": "Forest Permit (~₹200)",
+            "highlight": "Hike through lush emerald rolling grasslands, mountain streams, and majestic viewpoints of the Netravati river basin."
+        },
+        {
+            "title": "Coffee Plantation Berry Roasting & Tasting Trail",
+            "category": "☕ Coffee Estate Walk & Brewing",
+            "days": "Daily (10:00 AM - 1:00 PM)",
+            "venue": "Siri Coffee Estate Trails, KM Road",
+            "entry": "Free / Nominal (~₹100)",
+            "highlight": "Guided stroll through aromatic Arabica & Robusta coffee bushes, spice gardens, and fresh French-press tasting sessions."
+        }
+    ],
+    "chikkamagaluru": [
+        {
+            "title": "Mullayanagiri Peak Sunrise & Cloud Trek",
+            "category": "🌄 Highest Peak Trek (1,930m)",
+            "days": "Daily at Dawn (5:30 AM - 9:30 AM)",
+            "venue": "Mullayanagiri Peak Ridge (Highest Summit in Karnataka)",
+            "entry": "Free Summit Access",
+            "highlight": "Breathtaking 360° panoramic view above rolling cloud blankets from Karnataka's highest peak, followed by Baba Budangiri ridge hike."
+        },
+        {
+            "title": "Netravati Peak & Kudremukh Green Valley Trail",
+            "category": "🌿 Western Ghats Valley Trek",
+            "days": "Saturday & Sunday (6:00 AM - 2:00 PM)",
+            "venue": "Netravati Peak Trailhead, Samse / Kudremukh Range",
+            "entry": "Forest Permit (~₹200)",
+            "highlight": "Hike through lush emerald rolling grasslands, mountain streams, and majestic viewpoints of the Netravati river basin."
+        }
+    ],
+    "chickmagalur": [
+        {
+            "title": "Mullayanagiri Peak Sunrise & Cloud Trek",
+            "category": "🌄 Highest Peak Trek (1,930m)",
+            "days": "Daily at Dawn (5:30 AM - 9:30 AM)",
+            "venue": "Mullayanagiri Peak Ridge (Highest Summit in Karnataka)",
+            "entry": "Free Summit Access",
+            "highlight": "Breathtaking 360° panoramic view above rolling cloud blankets from Karnataka's highest peak, followed by Baba Budangiri ridge hike."
+        },
+        {
+            "title": "Netravati Peak & Kudremukh Green Valley Trail",
+            "category": "🌿 Western Ghats Valley Trek",
+            "days": "Saturday & Sunday (6:00 AM - 2:00 PM)",
+            "venue": "Netravati Peak Trailhead, Samse / Kudremukh Range",
+            "entry": "Forest Permit (~₹200)",
+            "highlight": "Hike through lush emerald rolling grasslands, mountain streams, and majestic viewpoints of the Netravati river basin."
+        }
+    ],
+    "coorg": [
+        {
+            "title": "Mandalpatti 4x4 Jeep Peak Safari",
+            "category": "🚙 Off-Road Ridge Adventure",
+            "days": "Daily (6:00 AM - 6:00 PM)",
+            "venue": "Mandalpatti Peak, Madikeri",
+            "entry": "Jeep Ride (~₹1,500 for group)",
+            "highlight": "Thrilling 4x4 off-road drive to the summit of Mandalpatti with sweeping views of the Pushpagiri wildlife sanctuary."
+        },
+        {
+            "title": "Dubare Elephant Camp & River Rafting",
+            "category": "🐘 Wildlife & River Activity",
+            "days": "Daily (9:00 AM - 1:00 PM)",
+            "venue": "Dubare Riverbank, Cauvery River",
+            "entry": "₹150",
+            "highlight": "Observe and participate in elephant bathing along the scenic banks of river Cauvery."
+        }
+    ],
+    "ladakh": [
+        {
+            "title": "Shanti Stupa Sunset & Milky Way Stargazing",
+            "category": "🌌 High-Altitude Stargazing & Heritage",
+            "days": "Daily (6:00 PM - 9:30 PM)",
+            "venue": "Shanti Stupa Hilltop, Leh",
+            "entry": "Free",
+            "highlight": "Witness golden hour light up the Indus valley and Namgyal Tsemo Fort followed by crystal-clear galaxy views."
+        },
+        {
+            "title": "Leh Main Bazaar Cultural & Yak Wool Fair",
+            "category": "🛍️ Himalayan Handicrafts & Evening Stroll",
+            "days": "Daily (4:00 PM - 8:30 PM)",
+            "venue": "Leh Main Street",
+            "entry": "Free",
+            "highlight": "Pedestrian-only cobble streets with Ladakhi women selling fresh apricots, prayer wheels, and pashmina shawls."
+        }
+    ],
+    "leh": [
+        {
+            "title": "Shanti Stupa Sunset & Milky Way Stargazing",
+            "category": "🌌 High-Altitude Stargazing & Heritage",
+            "days": "Daily (6:00 PM - 9:30 PM)",
+            "venue": "Shanti Stupa Hilltop, Leh",
+            "entry": "Free",
+            "highlight": "Witness golden hour light up the Indus valley and Namgyal Tsemo Fort followed by crystal-clear galaxy views."
+        }
+    ],
+    "gokarna": [
+        {
+            "title": "5-Beach Cliff Trek (Kudle to Paradise Beach)",
+            "category": "🏖️ Coastal Cliff Hike",
+            "days": "Daily at Dawn or Sunset (4:00 PM - 7:00 PM)",
+            "venue": "Gokarna Coastline",
+            "entry": "Free",
+            "highlight": "Traverse rocky headlands connecting Om Beach, Half Moon Beach, and secluded Paradise Beach."
+        }
+    ],
+    "hampi": [
+        {
+            "title": "Matanga Hill Sunrise & Coracle Ride at Sanapur",
+            "category": "🌅 Ancient Boulders & River Coracle",
+            "days": "Daily (5:30 AM - 10:00 AM)",
+            "venue": "Matanga Hill & Sanapur Lake",
+            "entry": "Free (~₹100 for coracle)",
+            "highlight": "Panoramic sunrise over the ruins of the Vijayanagara Empire followed by round boat rides between granite boulders."
+        }
+    ],
     "goa": [
         {
             "title": "Anjuna Flea & Night Music Market",
@@ -502,9 +822,36 @@ def discover_local_events(city: str, travel_style: str = "explorer") -> List[Dic
 # TOOL 4: Markdown Travel Guide Synthesis & Document Builder
 # ==============================================================================
 
+def calculate_minimum_realistic_budget(days: int, currency: str = "INR") -> float:
+    """
+    Mathematical formula calculating the realistic minimum budget
+    required for survival + accommodation + local transit + food for N days.
+    """
+    d = max(1, int(days) if days else 1)
+    n = max(1, d - 1)
+    curr = currency.upper()
+    
+    if curr == "USD":
+        # $40/night stay + $25/day food + $15/day transit + $30 buffer
+        return max(60.0, float((n * 40) + (d * 25) + (d * 15) + 30))
+    elif curr == "EUR":
+        return max(55.0, float((n * 38) + (d * 22) + (d * 14) + 25))
+    elif curr == "GBP":
+        return max(50.0, float((n * 35) + (d * 20) + (d * 12) + 25))
+    else:
+        # Default INR:
+        # ₹900/night budget homestay + ₹450/day basic meals + ₹250/day transit + ₹400 buffer
+        min_stay = n * 900
+        min_food = d * 450
+        min_transit = d * 250
+        min_buffer = 400
+        return max(1500.0, float(min_stay + min_food + min_transit + min_buffer))
+
+
 def generate_travel_buddy_markdown(
     city: str,
     budget: float,
+    days: int,
     currency: str,
     weather_info: Dict[str, Any],
     restaurants: List[Dict[str, Any]],
@@ -516,17 +863,29 @@ def generate_travel_buddy_markdown(
     Markdown travel guide document with structured tables, emojis, and clear tips.
     """
     sym = "₹" if currency.upper() in ["INR", "RS"] else ("$" if currency.upper() in ["USD", "CAD", "AUD"] else "€")
-    formatted_budget = f"{sym}{budget:,.0f}" if budget > 0 else f"{sym}10,000"
+    num_days = max(1, int(days) if days else 3)
+    num_nights = max(1, num_days - 1)
     
-    # Calculate estimated budget breakdown
-    food_budget = budget * 0.35 if budget > 0 else 3500
-    sightseeing_budget = budget * 0.25 if budget > 0 else 2500
-    transport_budget = budget * 0.25 if budget > 0 else 2500
-    cushion_budget = budget * 0.15 if budget > 0 else 1500
+    # Enforce realistic minimum budget calculation
+    min_budget = calculate_minimum_realistic_budget(num_days, currency)
+    effective_budget = max(budget, min_budget)
+    formatted_budget = f"{sym}{effective_budget:,.0f}"
+    
+    # Calculate itemized pricing breakdown with attention to detail
+    cab_airport = round(effective_budget * 0.10) if effective_budget > 0 else 600
+    cab_local = round(effective_budget * 0.14) if effective_budget > 0 else 800
+    cab_total = cab_airport + cab_local
+    
+    hotel_cost = round(effective_budget * 0.32) if effective_budget > 0 else 1600
+    food_cost = round(effective_budget * 0.26) if effective_budget > 0 else 1300
+    activities_cost = round(effective_budget * 0.10) if effective_budget > 0 else 400
+    buffer_cost = max(0, round(effective_budget - (cab_total + hotel_cost + food_cost + activities_cost)))
+    
+    total_estimated = cab_total + hotel_cost + food_cost + activities_cost + buffer_cost
 
     # Build weather rows
     weather_table_rows = []
-    for day in weather_info.get("daily_forecast", []):
+    for day in weather_info.get("daily_forecast", [])[:num_days]:
         weather_table_rows.append(
             f"| **{day['date']}** | {day['emoji']} {day['condition']} | **{day['temp_max']}°C** / {day['temp_min']}°C | {day['precip_chance']}% |"
         )
@@ -564,25 +923,69 @@ def generate_travel_buddy_markdown(
     # Build packing list
     packing_items = "\n".join([f"- [ ] {item}" for item in weather_info.get("packing_tips", [])])
 
-    # Complete Markdown document
-    markdown_doc = f"""# 🌍 Voyago Travel Buddy Guide: {city.title()}
-> **Autonomous Research Report Prepared for Your Trip** • Total Budget Target: **{formatted_budget}** • Travel Vibe: **{travel_style.title()}**
+    # Build dynamic multi-day timeline for all N days
+    timeline_items = []
+    timeline_md_sections = []
+    
+    r_names = [r['name'] for r in restaurants] if restaurants else [f"{city.title()} Local Cafe", f"{city.title()} Heritage Diner", f"{city.title()} Food Haven"]
+    e_names = [e['title'] for e in events] if events else [f"{city.title()} Evening Cultural Gathering", f"{city.title()} Local Market Fair"]
+    
+    for d in range(1, num_days + 1):
+        if d == 1:
+            day_title = f"Day 1: Arrival, Check-In & Sunset Immersion"
+            schedule = [
+                f"11:00 AM: Voyago Airport / Railway Station pickup to your accommodation.",
+                f"01:30 PM: Traditional lunch at {r_names[0]}.",
+                f"04:30 PM: Leisure stroll through historic city corridors & local bazaar.",
+                f"06:30 PM: Attend {e_names[0]} for evening sunset views & local atmosphere."
+            ]
+        elif d == num_days:
+            day_title = f"Day {d}: Sightseeing, Souvenirs & Return Departure"
+            schedule = [
+                f"09:30 AM: Morning heritage walk & hotel checkout.",
+                f"01:00 PM: Farewell feast at {r_names[-1]}.",
+                f"03:30 PM: Flea market & traditional handicraft souvenir shopping.",
+                f"06:00 PM: Voyago Return Airport / Railway Station Drop."
+            ]
+        else:
+            r_pick = r_names[(d - 1) % len(r_names)]
+            e_pick = e_names[(d - 1) % len(e_names)]
+            day_title = f"Day {d}: Full-Day Exploration, Culture & Local Dining"
+            schedule = [
+                f"09:00 AM: Scheduled Voyago local sightseeing tour (monuments & scenic viewpoints).",
+                f"01:00 PM: Regional specialties lunch at {r_pick}.",
+                f"04:00 PM: Cultural exploration, artisan workshops and scenic nature walk.",
+                f"07:30 PM: Evening visit to {e_pick} followed by dinner."
+            ]
+            
+        timeline_items.append({"day": day_title, "schedule": schedule})
+        timeline_md_sections.append(f"### 📅 **{day_title}**\n" + "\n".join([f"- {s}" for s in schedule]))
+        
+    timeline_str = "\n\n".join(timeline_md_sections)
+
+    # Complete Markdown document (Clean without shares or vibe)
+    markdown_doc = f"""# 📄 VOYAGO OFFICIAL TRAVEL ITINERARY & EXPENSE DOSSIER
+**Destination (PLACE)**: {city.title()}, India | **Duration (DAYS)**: {num_days} Days / {num_nights} Nights | **Total Budget**: {formatted_budget}
 
 ---
 
-## 💰 Smart Budget Allocation ({formatted_budget})
-Here is an optimized budget breakdown designed to maximize your experiences while keeping you safely within your **{formatted_budget}** limit:
+## 💰 DETAILED ITEM-BY-ITEM EXPENSE BREAKDOWN
 
-| Category | Allocation | Target Amount | Smart Savings Tip |
-| :--- | :---: | :---: | :--- |
-| 🍽️ **Food & Dining** | **35%** | `{sym}{food_budget:,.0f}` | Eat where locals queue; indulge in authentic street thalis/bistros. |
-| 🎟️ **Sightseeing & Events** | **25%** | `{sym}{sightseeing_budget:,.0f}` | Prioritize free city walking tours, open parks, and community markets. |
-| 🚕 **Local Transport** | **25%** | `{sym}{transport_budget:,.0f}` | Use Voyago scheduled rides or transit passes for intercity trips. |
-| 🛡️ **Buffer & Souvenirs** | **15%** | `{sym}{cushion_budget:,.0f}` | Emergency buffer and unique flea market mementos. |
+| Expense Category | Itemized Description | Cost ({currency.upper()}) |
+| :--- | :--- | :---: |
+| 🚕 **Voyago Cab Pickup & Drop** | Airport / Railway Station ⇄ Hotel Transfers (Sedan/Hatchback) | `{sym}{cab_airport:,.0f}` |
+| 🚕 **Voyago Local Sightseeing Cabs** | Day 1 to Day {num_days} Scheduled City Rides, Dinner & Beach Transfers | `{sym}{cab_local:,.0f}` |
+| 🏨 **Hotel & Accommodation** | {num_nights} Nights at Verified Partner Homestay / Boutique Resort | `{sym}{hotel_cost:,.0f}` |
+| 🍽️ **Food & Dining** | {num_days} Days Meals (Breakfast, Lunch at Curated Spots, Dinners & Drinks) | `{sym}{food_cost:,.0f}` |
+| 🎟️ **Activities & Sightseeing** | Local Event Entry Passes, Beach Access & Heritage Monument Fees | `{sym}{activities_cost:,.0f}` |
+| 🛡️ **Emergency & Souvenir Buffer** | Contingency Cushion & Local Flea Market Shopping | `{sym}{buffer_cost:,.0f}` |
+| 📊 **GRAND TOTAL ESTIMATED** | **All-Inclusive Trip Budget** | **`{sym}{total_estimated:,.0f}`** |
+
+*Budget Status: Verified realistic travel allocation ({formatted_budget}).*
 
 ---
 
-## ⛅ 7-Day Live Weather Forecast & Packing Essentials
+## ⛅ {num_days}-DAY LIVE WEATHER OUTLOOK & PACKING GUIDE
 **Current Outlook**: {weather_info.get('forecast_summary', 'Pleasant weather expected.')}  
 *Average Daytime Temperature*: **{weather_info.get('avg_temp', '26°C')}** *(Data Source: {weather_info.get('source', 'Live Geolocation API')})*
 
@@ -590,51 +993,40 @@ Here is an optimized budget breakdown designed to maximize your experiences whil
 | :--- | :---: | :---: | :---: |
 {weather_table_str}
 
-### 🎒 What to Pack
+### 🎒 Recommended Packing Essentials
 {packing_items}
 
 ---
 
-## 🍽️ Top 3 Affordable & Delicious Restaurants
+## 🍽️ TOP 3 AFFORDABLE & DELICIOUS RESTAURANTS (PLACES TO EAT)
 Handpicked dining spots matching your budget constraints without compromising on taste, hygiene, or authentic local flavor:
 
 {restaurants_str}
 
 ---
 
-## 🎟️ Local Events & Happenings This Week
+## 🎟️ LOCAL EVENTS & HAPPENINGS THIS WEEK
 Immerse yourself in {city.title()}'s vibrant culture with these curated local happenings:
 
 {events_str}
 
 ---
 
-## 🗺️ Recommended 3-Day Micro-Itinerary
-- **Day 1: Arrival & Local Immersion**
-  - *Morning*: Check in, grab fresh local breakfast near {restaurants[0]['name'] if len(restaurants) > 0 else 'downtown'}.
-  - *Afternoon*: Leisure stroll through historic streets and cultural landmarks.
-  - *Evening*: Head to {events[0]['title'] if len(events) > 0 else 'the night market'} for live vibes & sunset views.
-- **Day 2: Adventure & Culinary Discovery**
-  - *Morning*: Outdoor exploration / sightseeing with high energy.
-  - *Afternoon*: Lunch at {restaurants[1]['name'] if len(restaurants) > 1 else restaurants[0]['name']}.
-  - *Evening*: Cafe hopping and discovering local dessert corners.
-- **Day 3: Relaxation & Farewell Highlights**
-  - *Morning*: Sunrise walk / peaceful park stroll.
-  - *Afternoon*: Farewell feast at {restaurants[2]['name'] if len(restaurants) > 2 else restaurants[0]['name']}.
-  - *Evening*: Pick up unique souvenirs from the flea market.
+## 🗺️ STRUCTURED {num_days}-DAY ITINERARY TIMELINE
+{timeline_str}
 
 ---
 
-## 💡 Travel Buddy Insider Tips & Money-Saving Hacks
-1. 🕒 **Off-Peak Travel**: Book intra-city and local transit during non-rush hours to get the best ride availability and lowest wait times.
+## 💡 LOCAL INSIDER TIPS & MONEY-SAVING HACKS
+1. 🕒 **Off-Peak Travel**: Book intra-city and local transit during non-rush hours for fastest cab dispatch.
 2. 💧 **Stay Hydrated**: Always carry a refillable water flask to save on bottled water and reduce plastic waste.
-3. 💳 **Digital Payments**: Most spots accept UPI/cards, but keep `{sym}500 - {sym}1,000` in small currency notes for quick street eats and tipping.
-4. 📱 **Offline Navigation**: Download an offline map of {city.title()} on your phone before embarking on day trips.
+3. 💳 **Digital Payments**: Most Indian spots accept UPI (GPay/PhonePe), but keep small cash for quick street bites.
+4. 📱 **Offline Navigation**: Download an offline map of {city.title()} on your phone before day trips.
 
 ---
-*Report autonomously generated by **Voyago Travel Buddy Agent** powered by LangChain.*
+*Official Travel Dossier autonomously generated by **VOYO** (Voyago AI Travel Buddy Agent) powered by LangChain.*
 """
-    return markdown_doc.strip()
+    return markdown_doc.strip(), timeline_items
 
 
 # ==============================================================================
@@ -643,18 +1035,18 @@ Immerse yourself in {city.title()}'s vibrant culture with these curated local ha
 
 class TravelBuddyAgent:
     """
-    LangChain Autonomous Agent orchestrator that runs the multi-tool
-    pipeline and returns both the formatted Markdown document and real-time execution steps.
+    VOYO - LangChain Autonomous Travel Concierge Agent orchestrator.
     """
     
     def __init__(self):
-        self.name = "Voyago Travel Buddy Agent"
-        self.version = "2.0.0"
+        self.name = "VOYO - Autonomous AI Travel Agent"
+        self.version = "2.5.0"
 
     def execute(
         self,
         city: str,
         budget: float,
+        days: int = 3,
         currency: str = "INR",
         travel_style: str = "explorer"
     ) -> Dict[str, Any]:
@@ -668,6 +1060,7 @@ class TravelBuddyAgent:
         """
         city_clean = city.strip() or "Goa"
         safe_budget = float(budget) if budget and budget > 0 else 10000.0
+        num_days = max(1, int(days) if days else 3)
         currency_clean = currency.upper() if currency else "INR"
         style_clean = travel_style.lower() if travel_style else "explorer"
         
@@ -679,7 +1072,7 @@ class TravelBuddyAgent:
             "tool": "Agent Coordinator",
             "title": "Formulating Execution Strategy",
             "status": "completed",
-            "description": f"Targeting {city_clean} with budget limit of {currency_clean} {safe_budget:,.0f} and '{style_clean}' travel profile. Initializing multi-tool research chain."
+            "description": f"Targeting {city_clean} for {num_days} Days with budget limit of {currency_clean} {safe_budget:,.0f} and '{style_clean}' travel profile."
         })
         
         # Step 2: Tool Call - Weather Forecaster
@@ -687,7 +1080,7 @@ class TravelBuddyAgent:
         steps.append({
             "step_id": 2,
             "tool": "Weather Forecaster (Open-Meteo)",
-            "title": f"Fetched Live 7-Day Forecast for {city_clean}",
+            "title": f"Fetched Live Forecast for {city_clean}",
             "status": "completed",
             "description": f"Retrieved atmospheric conditions. Avg Temp: {weather_info.get('avg_temp', 'N/A')}. Outlook: {weather_info.get('forecast_summary', '')}"
         })
@@ -699,7 +1092,7 @@ class TravelBuddyAgent:
             "tool": "Restaurant Finder",
             "title": f"Discovered Top 3 Budget-Friendly Dining Spots",
             "status": "completed",
-            "description": f"Selected {len(restaurants)} high-rated culinary venues strictly adhering to meal budget allocations: {', '.join([r['name'] for r in restaurants[:3]])}."
+            "description": f"Selected {len(restaurants)} high-rated culinary venues: {', '.join([r['name'] for r in restaurants[:3]])}."
         })
         
         # Step 4: Tool Call - Local Events Finder
@@ -709,13 +1102,14 @@ class TravelBuddyAgent:
             "tool": "Local Events & Culture Radar",
             "title": f"Located Active Events Happening This Week",
             "status": "completed",
-            "description": f"Found {len(events)} curated community and cultural events in {city_clean}: {', '.join([e['title'] for e in events[:2]])}."
+            "description": f"Found {len(events)} curated community events in {city_clean}."
         })
         
         # Step 5: LangChain Synthesis & Formatting
-        markdown_document = generate_travel_buddy_markdown(
+        markdown_document, timeline_items = generate_travel_buddy_markdown(
             city=city_clean,
             budget=safe_budget,
+            days=num_days,
             currency=currency_clean,
             weather_info=weather_info,
             restaurants=restaurants,
@@ -726,24 +1120,26 @@ class TravelBuddyAgent:
         steps.append({
             "step_id": 5,
             "tool": "LangChain Synthesis Engine",
-            "title": "Compiled Publication-Grade Markdown Travel Document",
+            "title": "Compiled Publication-Grade Structured PDF Dossier",
             "status": "completed",
-            "description": "Synthesized budget tables, weather matrices, restaurant cards, event itineraries, and local insider tips into structured Markdown."
+            "description": "Synthesized budget tables, weather matrices, restaurant cards, event itineraries, and local insider tips."
         })
         
         # Structured Data for 1-Click Vacation Booking Integration
         structured_data = {
             "destination": city_clean,
             "budget": safe_budget,
+            "days": num_days,
             "currency": currency_clean,
             "travel_style": style_clean,
             "weather": weather_info,
             "restaurants": restaurants,
             "events": events,
+            "timeline": timeline_items,
             "booking_details": {
                 "destination": city_clean.title(),
                 "startDate": datetime.now().strftime("%Y-%m-%d"),
-                "endDate": (datetime.now() + timedelta(days=3)).strftime("%Y-%m-%d"),
+                "endDate": (datetime.now() + timedelta(days=num_days)).strftime("%Y-%m-%d"),
                 "passengers": 1 if safe_budget < 8000 else 2,
                 "vehicleType": "economy" if safe_budget < 12000 else "suv",
                 "hotelName": f"{city_clean.title()} Cozy Budget Stay" if safe_budget < 15000 else f"{city_clean.title()} Grand Resort",

@@ -46,3 +46,10 @@ build/
 # Cache
 .cache/
 *.cache
+
+# Temporary extractions & archive logs
+extracted_zip/
+extracted_zip_new/
+*.zip
+zip_log*.txt
+frontend/zip_log*.txt

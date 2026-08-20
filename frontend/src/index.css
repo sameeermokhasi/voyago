@@ -50,3 +50,97 @@
     @apply badge bg-blue-900 text-blue-100 border border-blue-700;
   }
 }
+
+/* VOYO 3D Concierge & Glow Utilities */
+.glow-yellow {
+  box-shadow: 0 0 0 1px rgba(255, 230, 0, 0.3), 0 0 40px -8px rgba(255, 230, 0, 0.55);
+}
+
+.text-glow {
+  text-shadow: 0 0 24px rgba(255, 230, 0, 0.55);
+}
+
+@keyframes voyo-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes voyo-slide-in {
+  from { opacity: 0; transform: translateX(24px) scale(0.96); }
+  to { opacity: 1; transform: translateX(0) scale(1); }
+}
+
+@keyframes voyo-fade-up {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes voyo-eq {
+  0%, 100% { height: 4px; }
+  50% { height: 14px; }
+}
+
+.animate-voyo-float {
+  animation: voyo-float 3.5s ease-in-out infinite;
+}
+
+.animate-voyo-slide-in {
+  animation: voyo-slide-in 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-voyo-fade-up {
+  animation: voyo-fade-up 0.35s ease-out forwards;
+}
+
+.animate-voyo-eq {
+  animation: voyo-eq 0.8s ease-in-out infinite;
+}
+
+/* ========================================================= */
+/* CRISP & CLEAN PDF PRINT STYLING (A4 DOCUMENT EXPORT) */
+/* ========================================================= */
+@media print {
+  html, body {
+    background: #ffffff !important;
+    color: #000000 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+  }
+
+  /* Hide everything else on the page */
+  body * {
+    visibility: hidden;
+  }
+
+  /* Make ONLY the Structured PDF Document visible */
+  #structured-pdf-print-area,
+  #structured-pdf-print-area * {
+    visibility: visible;
+  }
+
+  #structured-pdf-print-area {
+    position: absolute !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 20px !important;
+    background: #ffffff !important;
+    color: #000000 !important;
+    border: none !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+  }
+
+  /* Page break rules */
+  @page {
+    size: A4 portrait;
+    margin: 12mm 15mm;
+  }
+
+  .print-avoid-break {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+}
