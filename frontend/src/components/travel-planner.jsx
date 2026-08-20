@@ -16,14 +16,26 @@ import {
 } from '../lib/travel-data'
 
 export function TravelPlanner({ onSelectPlan }) {
+  const getToday = () => new Date().toISOString().split('T')[0]
+  const getFuture = (d) => { const x = new Date(); x.setDate(x.getDate() + d); return x.toISOString().split('T')[0] }
+
   const [destination, setDestination] = useState('Chikmagalur')
+  const [fromDate, setFromDate] = useState(getToday())
+  const [toDate, setToDate] = useState(getFuture(5))
   const [days, setDays] = useState(5)
   const [budget, setBudget] = useState(50000)
   const [state, setState] = useState('idle')
   const [stepIndex, setStepIndex] = useState(0)
   const [plan, setPlan] = useState(null)
   const [mounted, setMounted] = useState(false)
-  const [isDurationOpen, setIsDurationOpen] = useState(false)
+
+  const calculateDays = (start, end) => {
+    if (!start || !end) return 1
+    const s = new Date(start)
+    const e = new Date(end)
+    const diff = Math.ceil((e - s) / (1000 * 60 * 60 * 24))
+    return Math.max(1, diff)
+  }
 
   const timers = useRef([])
   const dropdownRef = useRef(null)
@@ -31,15 +43,8 @@ export function TravelPlanner({ onSelectPlan }) {
 
   useEffect(() => {
     setMounted(true)
-    const handleClickOutside = (e) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
-        setIsDurationOpen(false)
-      }
-    }
-    document.addEventListener('mousedown', handleClickOutside)
     return () => {
       timers.current.forEach((t) => window.clearTimeout(t))
-      document.removeEventListener('mousedown', handleClickOutside)
     }
   }, [])
 
@@ -55,22 +60,47 @@ export function TravelPlanner({ onSelectPlan }) {
     if (!destination.trim() || Number(budget || 0) < minBudget) return
     reset()
     setState('thinking')
-    setIsDurationOpen(false)
 
-    THINKING_STEPS.forEach((_, i) => {
-      const t = window.setTimeout(() => {
-        setStepIndex(i)
-        if (i === THINKING_STEPS.length - 1) {
-          const finish = window.setTimeout(() => {
-            const result = generatePlan(destination, days, budget)
-            setPlan(result)
-            setState('success')
-          }, 800)
-          timers.current.push(finish)
+    let wsBase = import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL.replace(/^http/, 'ws') : 'ws://127.0.0.1:8000'
+    if (wsBase.endsWith('/api')) wsBase = wsBase.replace('/api', '')
+    if (wsBase.endsWith('/api/')) wsBase = wsBase.replace('/api/', '')
+
+    const ws = new WebSocket(`${wsBase}/ws/travel-planner`)
+    
+    ws.onopen = () => {
+      ws.send(JSON.stringify({ destination, fromDate, toDate, budget, days }))
+    }
+    
+    ws.onmessage = (event) => {
+      try {
+        const msg = JSON.parse(event.data)
+        if (msg.status === 'thinking') {
+          setStepIndex(prev => (prev < THINKING_STEPS.length - 1 ? prev + 1 : prev))
+        } else if (msg.status === 'success') {
+          const result = generatePlan(destination, days, budget)
+          result.realWeather = msg.data.weather
+          result.realStays = msg.data.stays
+          setPlan(result)
+          setState('success')
+          ws.close()
+        } else if (msg.status === 'error') {
+          console.error("Travel Buddy Error:", msg.message)
+          const result = generatePlan(destination, days, budget)
+          setPlan(result)
+          setState('success')
+          ws.close()
         }
-      }, i * 700)
-      timers.current.push(t)
-    })
+      } catch(e) {
+        console.error("Error parsing WS message", e)
+      }
+    }
+    
+    ws.onerror = (err) => {
+      console.error('WebSocket Error:', err)
+      const result = generatePlan(destination, days, budget)
+      setPlan(result)
+      setState('success')
+    }
   }
 
   const scrollToDossier = () => {
@@ -112,59 +142,51 @@ export function TravelPlanner({ onSelectPlan }) {
                 disabled={busy}
               />
 
-              {/* Custom Scrollable Duration Dropdown (Showing 4 items at a time with scroll) */}
-              <div className="relative space-y-2" ref={dropdownRef}>
+              {/* Date Pickers */}
+              <div className="relative space-y-2">
                 <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-yellow-400">
                   <Calendar className="size-3.5" />
-                  Duration (Days)
+                  Travel Dates ({days} {days === 1 ? 'Day' : 'Days'})
                 </label>
 
-                {/* Dropdown Trigger Button */}
-                <button
-                  type="button"
-                  disabled={busy}
-                  onClick={() => setIsDurationOpen((prev) => !prev)}
-                  className="flex w-full items-center justify-between rounded-2xl border border-zinc-800 bg-zinc-900/90 px-4 py-3.5 text-base font-semibold text-white outline-none transition hover:border-zinc-700 focus:border-yellow-400 focus:ring-2 focus:ring-yellow-400/30 disabled:opacity-60"
-                >
-                  <span>{DURATION_LABELS[days] || `${days} Days`}</span>
-                  <ChevronDown
-                    className={`size-4 text-zinc-400 transition-transform duration-200 ${
-                      isDurationOpen ? 'rotate-180 text-yellow-400' : ''
-                    }`}
-                  />
-                </button>
-
-                {/* Scrollable Custom Dropdown Menu */}
-                {isDurationOpen && (
-                  <div className="absolute left-0 right-0 top-full mt-2 z-50 max-h-48 overflow-y-auto rounded-2xl border border-zinc-700/80 bg-[#121216] p-2 shadow-2xl backdrop-blur-xl space-y-1">
-                    {DURATIONS.map((d) => {
-                      const isSelected = days === d
-                      return (
-                        <button
-                          key={d}
-                          type="button"
-                          onClick={() => {
-                            setDays(d)
-                            const newMin = d * BASELINE_PER_DAY
-                            if (budget < newMin) {
-                              setBudget(newMin)
-                            }
-                            setIsDurationOpen(false)
-                            reset()
-                          }}
-                          className={`flex w-full items-center justify-between rounded-xl px-3.5 py-2.5 text-xs md:text-sm font-semibold transition ${
-                            isSelected
-                              ? 'bg-yellow-400 text-black font-extrabold shadow-md'
-                              : 'text-zinc-300 hover:bg-zinc-800 hover:text-white'
-                          }`}
-                        >
-                          <span>{DURATION_LABELS[d] || `${d} Days`}</span>
-                          {isSelected && <Check className="size-4 text-black" />}
-                        </button>
-                      )
-                    })}
+                <div className="flex gap-4">
+                  <div className="flex-1">
+                    <label className="block text-[10px] text-zinc-500 uppercase font-bold mb-1 ml-1">From</label>
+                    <input
+                      type="date"
+                      disabled={busy}
+                      value={fromDate}
+                      min={getToday()}
+                      onChange={(e) => {
+                        setFromDate(e.target.value)
+                        const d = calculateDays(e.target.value, toDate)
+                        setDays(d)
+                        const newMin = d * BASELINE_PER_DAY
+                        if (budget < newMin) setBudget(newMin)
+                        reset()
+                      }}
+                      className="w-full rounded-2xl border border-zinc-800 bg-zinc-900/90 px-4 py-3.5 text-sm font-semibold text-white outline-none transition hover:border-zinc-700 focus:border-yellow-400 focus:ring-2 focus:ring-yellow-400/30 disabled:opacity-60 [color-scheme:dark]"
+                    />
                   </div>
-                )}
+                  <div className="flex-1">
+                    <label className="block text-[10px] text-zinc-500 uppercase font-bold mb-1 ml-1">To</label>
+                    <input
+                      type="date"
+                      disabled={busy}
+                      value={toDate}
+                      min={fromDate}
+                      onChange={(e) => {
+                        setToDate(e.target.value)
+                        const d = calculateDays(fromDate, e.target.value)
+                        setDays(d)
+                        const newMin = d * BASELINE_PER_DAY
+                        if (budget < newMin) setBudget(newMin)
+                        reset()
+                      }}
+                      className="w-full rounded-2xl border border-zinc-800 bg-zinc-900/90 px-4 py-3.5 text-sm font-semibold text-white outline-none transition hover:border-zinc-700 focus:border-yellow-400 focus:ring-2 focus:ring-yellow-400/30 disabled:opacity-60 [color-scheme:dark]"
+                    />
+                  </div>
+                </div>
               </div>
 
               <BudgetSelector
